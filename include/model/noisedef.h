@@ -15,7 +15,7 @@
 #include <model/flavour/flavour.h>
 
 #define CHAR_AMOUNT_PER_LINE 120
-#define CHAR_REPEAT_HEIGHT 250
+#define CHAR_REPEAT_HEIGHT 256
 
 #define SYMBOL_VARIETY 10
 

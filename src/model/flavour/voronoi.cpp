@@ -17,7 +17,6 @@ namespace tasty {
         int bottomLeft_X = (x - (x % VORONOI_GRID_SCALE));
         int bottomLeft_Y = (y - (y % VORONOI_GRID_SCALE));
 
-
         double minDist = VORONOI_GRID_SCALE;
 
         int maxTileX, maxTileY, tileX, tileY;
@@ -29,11 +28,11 @@ namespace tasty {
             tileX = (bottomLeft_X / VORONOI_GRID_SCALE) - 1;
         }
 
-        if (bottomLeft_Y == 0) {
-            tileY = bottomLeft_Y / VORONOI_GRID_SCALE;
-        } else {
-            tileY = (bottomLeft_Y / VORONOI_GRID_SCALE) - 1;
-        }
+        //if (bottomLeft_Y == 0) {
+        //    tileY = bottomLeft_Y / VORONOI_GRID_SCALE;
+        //} else {
+        tileY = (bottomLeft_Y / VORONOI_GRID_SCALE) - 1;
+        //}
 
         if (bottomLeft_X + VORONOI_GRID_SCALE == VORONOI_WIDTH) {
             maxTileX = bottomLeft_X / VORONOI_GRID_SCALE;
@@ -41,11 +40,11 @@ namespace tasty {
             maxTileX = (bottomLeft_X / VORONOI_GRID_SCALE) + 1;
         }
 
-        if (bottomLeft_Y + VORONOI_GRID_SCALE == VORONOI_HEIGHT) {
-            maxTileY = bottomLeft_Y / VORONOI_GRID_SCALE;
-        } else {
-            maxTileY = (bottomLeft_Y / VORONOI_GRID_SCALE) + 1;
-        }
+        //if (bottomLeft_Y + VORONOI_GRID_SCALE == VORONOI_HEIGHT) {
+        //    maxTileY = bottomLeft_Y / VORONOI_GRID_SCALE;
+        //} else {
+        maxTileY = (bottomLeft_Y / VORONOI_GRID_SCALE) + 1;
+        //}
 
         // Calc closest point through neighbouring grids
         for (int yi = tileY; yi < maxTileY + 1; yi++) {
@@ -61,7 +60,7 @@ namespace tasty {
     }
 
 
-    void Voronoi::generate_grid() {
+    void Voronoi::generate_grid(SquareEntity* grid) {
         for (int y = 0; y < VORONOI_GRID_HEIGHT + 1; y++) {
             for (int x = 0; x < VORONOI_GRID_WIDTH + 1; x++) {
                 _GridCorners[x + ((VORONOI_GRID_WIDTH + 1) * y)].x =
@@ -72,9 +71,9 @@ namespace tasty {
         }
         for (int y = 0; y < VORONOI_GRID_HEIGHT; y++) {
             for (int x = 0; x < VORONOI_GRID_WIDTH; x++) {
-                _Grid[x + (VORONOI_GRID_WIDTH * y)].bot_left.x =
+                grid[x + (VORONOI_GRID_WIDTH * y)].bot_left.x =
                         x * VORONOI_GRID_SCALE;
-                _Grid[x + (VORONOI_GRID_WIDTH * y)].bot_left.y =
+                grid[x + (VORONOI_GRID_WIDTH * y)].bot_left.y =
                         y * VORONOI_GRID_SCALE;
             }
         }
@@ -87,11 +86,11 @@ namespace tasty {
         }
     }
 
-    void Voronoi::generate_fpoints() {
+    void Voronoi::generate_fpoints(SquareEntity* grid) {
         for (int i = 0; i < _SquareAmount; i++) {
-            _Grid[i].fp_amount =
+            grid[i].fp_amount =
                     _ProbabilityAmount[random() % VORONOI_FP_PROBABILITIES];
-            for (auto &f_point : _Grid[i].f_points) {
+            for (auto &f_point : grid[i].f_points) {
                 f_point.x =
                         fabs(cos((double) (random() % 250))) * VORONOI_GRID_SCALE;
                 f_point.y =
@@ -104,9 +103,9 @@ namespace tasty {
     double Voronoi::closest_point(int x, int y, double minDist, int xi, int yi) {
 
         int index = xi + (VORONOI_GRID_WIDTH * yi);
-        for (int i = 0; i < _Grid[index].fp_amount; i++) {
-            double subx = _Grid[index].f_points[i].x + _Grid[index].bot_left.x - x;
-            double suby = _Grid[index].f_points[i].y + _Grid[index].bot_left.y - y;
+        for (int i = 0; i < _Grid.at(index).fp_amount; i++) {
+            double subx = _Grid.at(index).f_points[i].x + _Grid.at(index).bot_left.x - x;
+            double suby = fabs(_Grid.at(index).f_points[i].y + yi*VORONOI_GRID_SCALE) - y;
             double dist = sqrt(dot_prod(subx, suby, subx, suby));
             minDist = minDist > dist ? dist : minDist;
         }

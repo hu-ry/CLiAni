@@ -29,4 +29,12 @@ inline double dot_prod(double x1, double y1, double x2, double y2) {
     return x1*x2+y1*y2;
 }
 
+inline float smoothstep(float edge0, float edge1, float x) {
+    // Scale, bias and saturate x to 0..1 range
+    x = 0.0 > (x - edge0) / (edge1 - edge0) ? 0.0 : x;
+    x = 1.0 < (x - edge0) / (edge1 - edge0) ? 1.0 : x;
+    // Evaluate polynomial
+    return x * x * (3 - 2 * x);
+}
+
 #endif //CLIANIMATION_HUMATH_H
