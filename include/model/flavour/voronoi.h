@@ -11,7 +11,7 @@
 #define CLIANIMATION_VORONOI_H
 
 #include <model/flavour/flavour.h>
-
+#include <utilz/cyclicptr.h>
 #include <glm/vec2.hpp>
 //#include <glm/ext/matrix_double2x3.hpp>
 
@@ -49,39 +49,41 @@ namespace tasty {
     public:
         explicit Voronoi(int seed) {
             _GridCorners = new Vec2UI[_GridSize];
-            _Grid = new SquareEntity[_SquareAmount];
-            generate_grid();
+            SquareEntity grid1[_SquareAmount];
+            generate_grid(grid1);
             precompute_prob_amount(seed + 1, VORONOI_FP_PROBABILITIES);
-            generate_fpoints();
+            generate_fpoints(grid1);
+            _Grid.copy(grid1, _SquareAmount);
         }
 
         Voronoi(const Voronoi &obj) { // copy constructor
             _GridCorners = new Vec2UI[_GridSize];
             *_GridCorners = *obj._GridCorners; // copy the value
-            _Grid = new SquareEntity[_SquareAmount];
-            *_Grid = *obj._Grid; // copy the value
+            _Grid = obj._Grid;
         }
 
         ~Voronoi() override {
             delete[]_GridCorners;
-            delete[]_Grid;
+
         }
 
         double generateNoise(int x, int y) override;
 
-    private:
+    protected:
         Vec2UI *_GridCorners; // Starts in bottom left corner of quadrant I.
-        SquareEntity *_Grid; // Square spaces and their Feature points
+        // Square spaces and their Feature points
+        CliAniHury::CyclicPtr<SquareEntity> _Grid =
+                CliAniHury::CyclicPtr<SquareEntity>(VORONOI_SQUARE_AMOUNT);
         int _ProbabilityAmount[VORONOI_FP_PROBABILITIES]{};
 
         static const int _GridSize = VORONOI_CORNER_AMOUNT;
         static const int _SquareAmount = VORONOI_SQUARE_AMOUNT;
 
-        void generate_grid();
+        void generate_grid(SquareEntity* grid);
 
         void precompute_prob_amount(unsigned int seed, int max);
 
-        void generate_fpoints();
+        void generate_fpoints(SquareEntity* grid);
 
         double closest_point(int x, int y, double minDist, int xi, int yi);
 
