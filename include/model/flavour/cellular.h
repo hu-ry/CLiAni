@@ -1,6 +1,8 @@
-//
-// Created by hury on 28.06.20.
-//
+//##############################################################################
+//## Project: ClAni ########################### Created by hury on 28.06.2020 ##
+//##############################################################################
+//## Author: Ryan Huth(hury) ############################# License: GNU GPLv3 ##
+//##############################################################################
 
 #ifndef CLIANIMATION_CELLULAR_H
 #define CLIANIMATION_CELLULAR_H
@@ -18,8 +20,34 @@ namespace tasty {
         double generateNoise(int x, int y) override;
 
     protected:
+        /**
+         *
+         * @c !!!DEPRECATED AND UNUSED FUNCTION!!!
+         *
+         * @param xLocal : int current x pixel
+         * @param yLocal : int current y pixel
+         * @param xi : int x grid index of current grid
+         * @param yi : int y grid index of current grid
+         * @param minDist : minimum Distance
+         * @param minGrid : minimum Grid indexes ?
+         * @param minRad : minimum radius
+         */
         void voronoi_pass(int xLocal, int yLocal, int xi, int yi,
                 double& minDist, glm::vec2& minGrid, glm::vec2& minRad);
+
+        /**
+         *
+         * @c !!!DEPRECATED AND UNUSED FUNCTION!!!
+         *
+         * @param xLocal : int current x pixel
+         * @param yLocal : int current y pixel
+         * @param xi : int x grid index of current grid
+         * @param yi : int y grid index of current grid
+         * @param minDist : minimum Distance
+         * @param minGrid : minimum Grid indexes ?
+         * @param minRad : minimum radius
+         * @return the final distance
+         */
         double distance_pass(int xLocal, int yLocal, int xi, int yi,
                 double minDist, glm::vec2& minGrid, glm::vec2& minRad);
 

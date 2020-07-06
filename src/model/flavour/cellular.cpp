@@ -1,6 +1,3 @@
-//╔═══════════════════════════════════════════════════════════════════════════════════════╗
-//║▒░░▒▒░░▒▒▒░░▒▒▒░░▒▒░░▒▒▒▒░░▒▒▒░░▒▒▒▒▒▒▒░░▒░░▒▒▒▒░░▒▒░░▒▒▒░░▒▒▒▒░░▒▒░░▒▒▒░░▒▒▒▒▒▒░░▒▒░░▒║
-//╚═══════════════════════════════════════════════════════════════════════════════════════╝
 //##############################################################################
 //## Project: ClAni ########################### Created by hury on 28.06.2020 ##
 //##############################################################################
@@ -8,8 +5,6 @@
 //##############################################################################
 
 #include <glm/geometric.hpp>
-#include <glm/common.hpp>
-#include <glm/vec3.hpp>
 
 #include <model/flavour/cellular.h>
 #include <utilz/humath.h>
@@ -17,13 +12,18 @@
 
 namespace tasty {
 
+    // Hardcoded values for different shades
+    float shades[10] = {0.09, 0.19, 0.29, 0.37,
+    0.46, 0.55, 0.63, 0.7, 0.82, 9.0};
+
     double Cellular::generateNoise(int x, int y) {
         int bottomLeft_X = (x - (x % VORONOI_GRID_SCALE));
         int bottomLeft_Y = (y - (y % VORONOI_GRID_SCALE));
 
 
         double minDist = VORONOI_GRID_SCALE;
-        glm::vec2 minGrid, minRad;
+        glm::vec2 minGrid = glm::vec2(1, 1);
+        glm::vec2 minPoint = glm::vec2(1, 1);
 
         int maxTileX, maxTileY, tileX, tileY;
 
@@ -34,11 +34,7 @@ namespace tasty {
             tileX = (bottomLeft_X / VORONOI_GRID_SCALE) - 1;
         }
 
-        if (bottomLeft_Y == 0) {
-            tileY = bottomLeft_Y / VORONOI_GRID_SCALE;
-        } else {
-            tileY = (bottomLeft_Y / VORONOI_GRID_SCALE) - 1;
-        }
+        tileY = (bottomLeft_Y / VORONOI_GRID_SCALE) - 1;
 
         if (bottomLeft_X + VORONOI_GRID_SCALE == VORONOI_WIDTH) {
             maxTileX = bottomLeft_X / VORONOI_GRID_SCALE;
@@ -46,18 +42,38 @@ namespace tasty {
             maxTileX = (bottomLeft_X / VORONOI_GRID_SCALE) + 1;
         }
 
-        if (bottomLeft_Y + VORONOI_GRID_SCALE == VORONOI_HEIGHT) {
-            maxTileY = bottomLeft_Y / VORONOI_GRID_SCALE;
-        } else {
-            maxTileY = (bottomLeft_Y / VORONOI_GRID_SCALE) + 1;
-        }
+        maxTileY = (bottomLeft_Y / VORONOI_GRID_SCALE) + 1;
 
-        // Calc first voronoi pass for neighbour grid
+        // Calc voronoi pass for neighbour grid
         for (int yi = tileY; yi < maxTileY + 1; yi++) {
             for (int xi = tileX; xi < maxTileX + 1; xi++) {
-                // First PASS
 
+                int index = xi + (VORONOI_GRID_WIDTH * yi);
+                for (int i = 0; i < _Grid.at(index).fp_amount; i++) {
+                    glm::vec2 rad;
+                    glm::vec2 point;
+                    point.x = _Grid.at(index).f_points[i].x;
+                    point.y = _Grid.at(index).f_points[i].y;
+                    rad.x = point.x + xi*VORONOI_GRID_SCALE - (float)x;
+                    rad.y = fabsf(point.y + yi*VORONOI_GRID_SCALE) - y;
 
+                    double dist = sqrt(glm::dot(rad, rad));
+                    //double dist = glm::dot(rad, rad);
+
+                    if (dist < minDist) {
+                        // Saving closest distance
+                        minDist = dist;
+                        // Saving Closest Point
+                        int temp;
+                        if(index < 0) {
+                            temp = (VORONOI_SQUARE_AMOUNT+index)%VORONOI_SQUARE_AMOUNT;
+                        } else {
+                            temp = index%VORONOI_SQUARE_AMOUNT;
+                        }
+                        minGrid = glm::vec2(temp, i);
+                        minPoint = point;
+                    }
+                }
             }
         }
 
@@ -75,21 +91,21 @@ namespace tasty {
         //if(maxTileY >= VORONOI_GRID_HEIGHT)
         //    maxTileY -= 1;
 
-        for (int yi = tileY; yi < maxTileY + 1; yi++) {
-            for (int xi = tileX; xi < maxTileX + 1; xi++) {
-                // Second PASS
+        float temp =    (minGrid.x/VORONOI_SQUARE_AMOUNT)+(minGrid.y*2)
+                        + roundf(minPoint.y/VORONOI_GRID_SCALE);
+        int shade_index = (int)lroundf32((temp/5)*10);
+
+        double result = shades[shade_index];
 
 
-            }
-        }
-
-        double result = minDist / VORONOI_GRID_SCALE;
+        // (minPoint.x / VORONOI_GRID_SCALE + minPoint.y / VORONOI_GRID_SCALE)/2;
+        // + (((minPoint.y / VORONOI_GRID_SCALE) * (minPoint.y / VORONOI_GRID_SCALE)) / 1.5);
 
         // !!!Unused Code!!!
         //glm::vec3 color = glm::mix( glm::vec3(1.0), glm::vec3(0.0), smoothstep( 0.03, 0.08, (float)result ) );
         //result = 0.2126*color.x + 0.7152*color.y + 0.0722*color.z;
 
-        return result; // Doesn't work yet :C
+        return result; // WORKS NOW!
     }
 
 
@@ -100,7 +116,7 @@ namespace tasty {
         for (int i = 0; i < _Grid.at(index).fp_amount; i++) {
             glm::vec2 rad;
             rad.x = _Grid.at(index).f_points[i].x + _Grid.at(index).bot_left.x - xLocal;
-            rad.y = _Grid.at(index).f_points[i].y + _Grid.at(index).bot_left.y - yLocal;
+            rad.y = _Grid.at(index).f_points[i].y + yi*VORONOI_GRID_SCALE - yLocal;
 
             //double dist = sqrt(dot_prod(xRad, yRad, xRad, yRad));
             double dist = glm::dot(rad, rad);
@@ -120,7 +136,7 @@ namespace tasty {
         for (int i = 0; i < _Grid.at(index).fp_amount; i++) {
             glm::vec2 rad;
             rad.x = _Grid.at(index).f_points[i].x + _Grid.at(index).bot_left.x - xLocal;
-            rad.y = _Grid.at(index).f_points[i].y + _Grid.at(index).bot_left.y - yLocal;
+            rad.y = _Grid.at(index).f_points[i].y + yi*VORONOI_GRID_SCALE - yLocal;
 
 
             if ( glm::dot(minRad-rad, minRad-rad)>1.00f) {
