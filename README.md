@@ -5,6 +5,8 @@ The purpose of this project is not well defined and just something I work on by 
 
 The project uses CMake v3.15 and C++14.
 
-[Scrolling Cellular Voronoi Pattern](doc/Cellular.png)
+### Scrolling Cellular Voronoi Pattern
+![Scrolling Cellular Voronoi Pattern](doc/Cellular.png)
 
-[Scrolling Simple Voronoi Pattern](doc/Voronoi.png)
+### Scrolling Simple Voronoi Pattern
+![Scrolling Simple Voronoi Pattern](doc/Voronoi.png)
