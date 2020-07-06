@@ -4,3 +4,7 @@ Clani is a commandline program for any Linux distro written in C/C++, which can 
 The purpose of this project is not well defined and just something I work on by the side for fun.
 
 The project uses CMake v3.15 and C++14.
+
+[Scrolling Cellular Voronoi Pattern](doc/Cellular.png)
+
+[Scrolling Simple Voronoi Pattern](doc/Voronoi.png)
