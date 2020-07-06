@@ -14,6 +14,7 @@
 #include <model/flavour/flavour.h>
 #include <model/flavour/perlinnoise.h>
 #include <model/flavour/voronoi.h>
+#include <model/flavour/cellular.h>
 #include <cstdint>
 #include <memory>
 

@@ -47,7 +47,7 @@ namespace CliAniHury {
         const char *choices[5] = {
                 "Perlin Noise",
                 "Voronoi",
-                "Placeholder 1",
+                "Cell Voronoi",
                 "Placeholder 2",
                 "the Exit"
                 };
@@ -55,7 +55,7 @@ namespace CliAniHury {
         const char *effectChoices[5] = {
                 "Scrolling",
                 "Scrolling",
-                "Placeholder 1",
+                "Scrolling",
                 "Placeholder 2",
                 "Just show me"
         };

@@ -35,6 +35,9 @@ namespace CliAniHury {
             case FLAVOUR_VORONOI:
                 _usedFlavour = new tasty::Voronoi(seed);
                 break;
+            case FLAVOUR_CELLULAR: // Doesn't work yet
+                _usedFlavour = new tasty::Cellular(seed);
+                break;
             case FLAVOUR_TYPE_1:
                 _usedFlavour = new tasty::Flavour();
                 break;
