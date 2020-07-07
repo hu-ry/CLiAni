@@ -14,12 +14,10 @@ namespace CliAniHury {
         _inputCharSize = MAX_INPUT_CHAR;
         _inputChars.resize(_inputCharSize);
         _usedFlavour = new tasty::Flavour;
-        //printf("Created instance of GreaseMonkey!\n");
     }
 
     GreaseMonkey::~GreaseMonkey() {
         delete _usedFlavour;
-        //printf("Deleted instance of GreaseMonkey!\n");
     }
 
     void GreaseMonkey::setup(int seed, int flavour) {
@@ -32,7 +30,7 @@ namespace CliAniHury {
             case FLAVOUR_VORONOI:
                 _usedFlavour = new tasty::Voronoi(seed);
                 break;
-            case FLAVOUR_CELLULAR: // Doesn't work yet
+            case FLAVOUR_CELLULAR:
                 _usedFlavour = new tasty::Cellular(seed);
                 break;
             case FLAVOUR_TYPE_1:

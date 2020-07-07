@@ -12,8 +12,6 @@
 #include <model/flavour/perlinnoise.h>
 #include <model/flavour/voronoi.h>
 #include <model/flavour/cellular.h>
-#include <cstdint>
-#include <memory>
 
 #define MAX_INPUT_CHAR SYMBOL_VARIETY
 
