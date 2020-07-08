@@ -18,4 +18,11 @@ enum e_Flavour{
     FLAVOUR_GENERIC
 };
 
+enum e_NoiseAttribute{
+    ATTRIBUTE_SCROLLING = 0,
+    ATTRIBUTE_RAINING,
+    ATTRIBUTE_ZIGZAG,
+    ATTRIBUTE_GENERIC
+};
+
 #endif //CLIANIMATION_GLOBAL_H
