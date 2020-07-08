@@ -23,6 +23,7 @@ namespace tasty {
     NoiseAttribute noise_scrolling(Flavour &flavour, int x, int y);
     NoiseAttribute noise_raining(Flavour &flavour, int x, int y);
     NoiseAttribute noise_zigzag(Flavour &flavour, int x, int y);
+    NoiseAttribute noise_static(Flavour &flavour, int x, int y);
 
     typedef NoiseAttribute (*noise_attribute_func) (Flavour &, int, int);
 

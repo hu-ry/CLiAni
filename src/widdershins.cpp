@@ -42,7 +42,7 @@ namespace CliAniHury {
         // Asks User for an optional Seed
         int seed = _View->requestUserSeed(uinput1, n);
         // Preparing model and noise functions for operating
-        _Engine.setup(seed, _View->getSelection(), 0);
+        _Engine.setup(seed, _View->getSelection(), 1);
     }
 
     void Widdershins::runFrame(int time) {
