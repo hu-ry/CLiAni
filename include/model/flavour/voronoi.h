@@ -10,7 +10,6 @@
 #include <model/flavour/flavour.h>
 #include <utilz/cyclicptr.h>
 #include <glm/vec2.hpp>
-//#include <glm/ext/matrix_double2x3.hpp>
 
 #define VORONOI_GRID_SCALE 32
 #define VORONOI_WIDTH 128

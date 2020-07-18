@@ -17,6 +17,9 @@ namespace tasty {
     0.46, 0.55, 0.63, 0.7, 0.82, 9.0};
 
     double Cellular::generateNoise(int x, int y) {
+        x = x % VORONOI_WIDTH;
+        y = y % VORONOI_HEIGHT;
+
         int bottomLeft_X = (x - (x % VORONOI_GRID_SCALE));
         int bottomLeft_Y = (y - (y % VORONOI_GRID_SCALE));
 
@@ -27,21 +30,12 @@ namespace tasty {
 
         int maxTileX, maxTileY, tileX, tileY;
 
-        // For checking bounds and literal SANITY CHECK!!!
-        if (bottomLeft_X == 0) {
-            tileX = bottomLeft_X / VORONOI_GRID_SCALE;
-        } else {
-            tileX = (bottomLeft_X / VORONOI_GRID_SCALE) - 1;
-        }
-
+        // For checking bounds
+        tileX = (bottomLeft_X / VORONOI_GRID_SCALE) - (bottomLeft_X != 0);
         tileY = (bottomLeft_Y / VORONOI_GRID_SCALE) - 1;
 
-        if (bottomLeft_X + VORONOI_GRID_SCALE == VORONOI_WIDTH) {
-            maxTileX = bottomLeft_X / VORONOI_GRID_SCALE;
-        } else {
-            maxTileX = (bottomLeft_X / VORONOI_GRID_SCALE) + 1;
-        }
-
+        maxTileX = (bottomLeft_X / VORONOI_GRID_SCALE)
+                   + (bottomLeft_X + VORONOI_GRID_SCALE != VORONOI_WIDTH);
         maxTileY = (bottomLeft_Y / VORONOI_GRID_SCALE) + 1;
 
         // Calc voronoi pass for neighbour grid
@@ -77,20 +71,6 @@ namespace tasty {
             }
         }
 
-        //tileX -= 1;
-        //tileY -= 1;
-        //maxTileX += 1;
-        //maxTileY += 1;
-        //
-        //if(tileX < 0)
-        //    tileX = 0;
-        //if(tileY < 0)
-        //    tileY = 0;
-        //if(maxTileX >= VORONOI_GRID_WIDTH)
-        //    maxTileX -= 1;
-        //if(maxTileY >= VORONOI_GRID_HEIGHT)
-        //    maxTileY -= 1;
-
         float temp =    (minGrid.x/VORONOI_SQUARE_AMOUNT)+(minGrid.y*2)
                         + roundf(minPoint.y/VORONOI_GRID_SCALE);
         int shade_index = (int)lroundf32((temp/5)*10);
@@ -103,7 +83,7 @@ namespace tasty {
 
         // !!!Unused Code!!!
         //glm::vec3 color = glm::mix( glm::vec3(1.0), glm::vec3(0.0), smoothstep( 0.03, 0.08, (float)result ) );
-        //result = 0.2126*color.x + 0.7152*color.y + 0.0722*color.z;
+        //result = 0.2126*color.x + 0.7152*color.y + 0.0722*color.z; // grayscale
 
         return result; // WORKS NOW!
     }
@@ -118,7 +98,6 @@ namespace tasty {
             rad.x = _Grid.at(index).f_points[i].x + _Grid.at(index).bot_left.x - xLocal;
             rad.y = _Grid.at(index).f_points[i].y + yi*VORONOI_GRID_SCALE - yLocal;
 
-            //double dist = sqrt(dot_prod(xRad, yRad, xRad, yRad));
             double dist = glm::dot(rad, rad);
 
             if (dist < minDist) {

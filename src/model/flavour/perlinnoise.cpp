@@ -8,10 +8,6 @@
 #include <model/flavour/perlinnoise.h>
 #include <utilz/humath.h>
 
-#include <unistd.h>
-#include <iostream>
-#include <fstream>
-
 namespace tasty {
 
     double PerlinNoise::generateNoise(int x, int y) {
@@ -36,27 +32,16 @@ namespace tasty {
             Vec2D *gradients) {
 
         int index = x + ((NOISE_GRID_WIDTH + 1) * y);
-        //std::ofstream file("Debug.txt", std::ofstream::app);
-        //file << "Index: " << index << " with X: " << x << " | " << y << " :Y"<< std::endl;
 
         return ((x - internX) * gradients[index].x) + ((y - internY) * gradients[index].y);
     }
 
     double PerlinNoise::genPerlinNoise(int x_cord, int y_cord, Vec2D *gradients) {
-        int bottomLeft_X = 0;
-        int bottomLeft_Y = 0;
+        x_cord = x_cord % NOISE_WIDTH;
+        y_cord = y_cord % NOISE_WIDTH;
 
-        if (x_cord == NOISE_WIDTH) {
-            bottomLeft_X = x_cord - NOISE_GRID_SCALE;
-        } else {
-            bottomLeft_X = (x_cord - (x_cord % NOISE_GRID_SCALE));
-        }
-
-        if (y_cord == NOISE_HEIGHT) {
-            bottomLeft_Y = y_cord - NOISE_GRID_SCALE;
-        } else {
-            bottomLeft_Y = (y_cord - (y_cord % NOISE_GRID_SCALE));
-        }
+        int bottomLeft_X = (x_cord - (x_cord % NOISE_GRID_SCALE));
+        int bottomLeft_Y = (y_cord - (y_cord % NOISE_GRID_SCALE));
 
         GridRectangle grid{
                 .tl=calc_dot_grid_gradient( // Top Left Corner
@@ -96,10 +81,9 @@ namespace tasty {
         double top = linear_inpo(grid.tl, grid.tr, weight);
         double bot = linear_inpo(grid.bl, grid.br, weight);
 
-        weight = smooth((double)
-                                abs(y_cord - (bottomLeft_Y + NOISE_GRID_SCALE))
+        weight = smooth((double)abs(y_cord - (bottomLeft_Y + NOISE_GRID_SCALE))
                         / NOISE_GRID_SCALE);
 
-        return (double) (linear_inpo(top, bot, weight) + 1) / 2;
+        return (linear_inpo(top, bot, weight) + 1.0) / 2.0;
     }
 }; // end of namespace tasty
