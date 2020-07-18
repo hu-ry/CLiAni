@@ -94,14 +94,13 @@ namespace tasty {
             for (int i = 0; i < _size; i++) {
 
                 double noise = (*_TypeFunc)(*_entity, i, _currentRow);
-
-                for (int k = 0; k < SYMBOL_VARIETY; k++) {
-                    if (noise < _symbolRanges[k]) {
-                        _symbols[i] = _uniqueSymbols[k];
-                        goto Found_Symbol;
-                    }
+                bool notfound = true;
+                for (int k = 0; k < SYMBOL_VARIETY && notfound; k++) {
+                    // To prevent the compiler from skipping iterations when
+                    // using -O3 and causing unwanted behaviour
+                    notfound = noise >= _symbolRanges[k];
+                    _symbols[i] = (!notfound) * _uniqueSymbols[k];
                 }
-                Found_Symbol:;
             }
 
             _currentRow = (1 + _currentRow) % CHAR_REPEAT_HEIGHT;
