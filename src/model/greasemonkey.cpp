@@ -6,7 +6,6 @@
 
 
 #include <model/greasemonkey.h>
-#include <utilz/global.h>
 
 namespace CliAniHury {
 
@@ -50,8 +49,11 @@ namespace CliAniHury {
             case ATTRIBUTE_ZIGZAG:
                 _currIteration.assignFlavour(_usedFlavour, &tasty::noise_zigzag);
                 break;
-            case ATTRIBUTE_GENERIC:
-                _currIteration.assignFlavour(_usedFlavour, &tasty::noise_scrolling);
+            case ATTRIBUTE_ZIGZAG_LEGACY:
+                _currIteration.assignFlavour(_usedFlavour, &tasty::noise_zigzag_legacy);
+                break;
+            case ATTRIBUTE_STATIC:
+                _currIteration.assignFlavour(_usedFlavour, &tasty::noise_static);
                 break;
             default:
                 _currIteration.assignFlavour(_usedFlavour, &tasty::noise_scrolling);

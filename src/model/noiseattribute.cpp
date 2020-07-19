@@ -22,18 +22,6 @@ namespace tasty {
     unsigned int att_raining_curr_noise_count = 0;
 
     NoiseAttribute noise_raining(Flavour &flavour, int x, int y) {
-        //if(y%6 == 0 && !att_raining_isInit) { // every 6 y's the noise array gets new random values
-        //    int entropy = (int)random();
-        //    // seeding inital population
-        //    for(unsigned int i = 0; i < INDEX_SIZE; i++) {
-        //        //temp = modf((double)entropy/1000, nullptr);
-        //        att_raining_noise[i] = entropy;
-        //    }
-        //    att_raining_isInit = true;
-        //} else {
-        //    att_raining_isInit = false;
-        //}
-
         if(att_raining_current_y != y) {
             att_raining_current_y = y;
             att_raining_noise_pop[ (int)random()%CHAR_AMOUNT_PER_LINE ] = 1;
@@ -43,22 +31,16 @@ namespace tasty {
             }
         }
 
-
         if(att_raining_noise_pop[( x % CHAR_AMOUNT_PER_LINE )] == 1) {
             return flavour.generateNoise(x, y);
         } else {
             return 0.0;
         }
-
-        // TODO: Do some math with the noise to make rain
-        //if(entropy%4 != 0 || y%4 == 0) {
-        //    result = flavour.generateNoise(noise[x%6]%120 ,noise[y%6]%120);
-        //} else {
-        //    result = 0.0;
-        //}
     }
 
     int att_zigzag_current_y = -1;
+    int att_zigzag_global_offset = 0;
+    int att_zigzag_global_direction = 1;
     int att_zigzag_amp = 4;
 
     // 0 : if current pop is enabled with either 0 if not and 1 if active
@@ -67,8 +49,44 @@ namespace tasty {
     // 3 : Satisfactory termination counter of owned pop
     int att_zigzag_noise_pop[CHAR_AMOUNT_PER_LINE][4] = { };
 
+    bool att_zigzag_isWithinRange(int index, int offset) {
+        return att_zigzag_noise_pop[index][0] == 1
+            && att_zigzag_global_offset == offset;
+    }
+
     NoiseAttribute noise_zigzag(Flavour &flavour, int x, int y) {
 
+        if(att_zigzag_current_y != y) {
+            att_zigzag_current_y = y;
+
+            att_zigzag_global_direction =
+                    ( att_zigzag_global_offset == att_zigzag_amp) * -2
+                    + att_zigzag_global_direction
+                    + (2 * (att_zigzag_global_offset == -att_zigzag_amp) );
+            att_zigzag_global_offset += att_zigzag_global_direction;
+
+            att_zigzag_noise_pop[(int)random()%CHAR_AMOUNT_PER_LINE][0] = 1;
+        }
+
+        int index = x % CHAR_AMOUNT_PER_LINE;
+
+        if(att_zigzag_isWithinRange(index, 0) ||
+            att_zigzag_isWithinRange((index+1) % CHAR_AMOUNT_PER_LINE, -1) ||
+            att_zigzag_isWithinRange((index+2) % CHAR_AMOUNT_PER_LINE, -2) ||
+            att_zigzag_isWithinRange((index+3) % CHAR_AMOUNT_PER_LINE, -3) ||
+            att_zigzag_isWithinRange((index+4) % CHAR_AMOUNT_PER_LINE, -4) ||
+            att_zigzag_isWithinRange(((index-1<0)*CHAR_AMOUNT_PER_LINE)+index-1, 1) ||
+            att_zigzag_isWithinRange(((index-2<0)*CHAR_AMOUNT_PER_LINE)+index-2, 2) ||
+            att_zigzag_isWithinRange(((index-3<0)*CHAR_AMOUNT_PER_LINE)+index-3, 3) ||
+            att_zigzag_isWithinRange(((index-4<0)*CHAR_AMOUNT_PER_LINE)+index-4, 4))
+        {
+            return flavour.generateNoise(x, y);
+        } else {
+            return 0.0;
+        }
+    }
+
+    NoiseAttribute noise_zigzag_legacy(Flavour &flavour, int x, int y) {
         if(att_zigzag_current_y != y) {
             att_zigzag_current_y = y;
 
@@ -97,15 +115,15 @@ namespace tasty {
         int index = x % CHAR_AMOUNT_PER_LINE;
 
         if((att_zigzag_noise_pop[index][0] == 1 && att_zigzag_noise_pop[index][1] == 0) ||
-        (att_zigzag_noise_pop[(index+1) % CHAR_AMOUNT_PER_LINE][0] == 1 && att_zigzag_noise_pop[index+1][1] == -1 ) ||
-                (att_zigzag_noise_pop[(index+2) % CHAR_AMOUNT_PER_LINE][0] == 1 && att_zigzag_noise_pop[index+2][1] == -2 ) ||
-                (att_zigzag_noise_pop[(index+3) % CHAR_AMOUNT_PER_LINE][0] == 1 && att_zigzag_noise_pop[index+3][1] == -3 ) ||
-                (att_zigzag_noise_pop[(index+4) % CHAR_AMOUNT_PER_LINE][0] == 1 && att_zigzag_noise_pop[index+4][1] == -4 ) ||
-                (att_zigzag_noise_pop[((index-1<0)*CHAR_AMOUNT_PER_LINE)+index-1][0] == 1 && att_zigzag_noise_pop[((index-1<0)*CHAR_AMOUNT_PER_LINE)+index-1][1] == 1 ) ||
-                (att_zigzag_noise_pop[((index-2<0)*CHAR_AMOUNT_PER_LINE)+index-2][0] == 1 && att_zigzag_noise_pop[((index-2<0)*CHAR_AMOUNT_PER_LINE)+index-2][1] == 2 ) ||
-                (att_zigzag_noise_pop[((index-3<0)*CHAR_AMOUNT_PER_LINE)+index-3][0] == 1 && att_zigzag_noise_pop[((index-3<0)*CHAR_AMOUNT_PER_LINE)+index-3][1] == 3 ) ||
-                (att_zigzag_noise_pop[((index-4<0)*CHAR_AMOUNT_PER_LINE)+index-4][0] == 1 && att_zigzag_noise_pop[((index-4<0)*CHAR_AMOUNT_PER_LINE)+index-4][1] == 4 )
-        ) {
+           (att_zigzag_noise_pop[(index+1) % CHAR_AMOUNT_PER_LINE][0] == 1 && att_zigzag_noise_pop[index+1][1] == -1 ) ||
+           (att_zigzag_noise_pop[(index+2) % CHAR_AMOUNT_PER_LINE][0] == 1 && att_zigzag_noise_pop[index+2][1] == -2 ) ||
+           (att_zigzag_noise_pop[(index+3) % CHAR_AMOUNT_PER_LINE][0] == 1 && att_zigzag_noise_pop[index+3][1] == -3 ) ||
+           (att_zigzag_noise_pop[(index+4) % CHAR_AMOUNT_PER_LINE][0] == 1 && att_zigzag_noise_pop[index+4][1] == -4 ) ||
+           (att_zigzag_noise_pop[((index-1<0)*CHAR_AMOUNT_PER_LINE)+index-1][0] == 1 && att_zigzag_noise_pop[((index-1<0)*CHAR_AMOUNT_PER_LINE)+index-1][1] == 1 ) ||
+           (att_zigzag_noise_pop[((index-2<0)*CHAR_AMOUNT_PER_LINE)+index-2][0] == 1 && att_zigzag_noise_pop[((index-2<0)*CHAR_AMOUNT_PER_LINE)+index-2][1] == 2 ) ||
+           (att_zigzag_noise_pop[((index-3<0)*CHAR_AMOUNT_PER_LINE)+index-3][0] == 1 && att_zigzag_noise_pop[((index-3<0)*CHAR_AMOUNT_PER_LINE)+index-3][1] == 3 ) ||
+           (att_zigzag_noise_pop[((index-4<0)*CHAR_AMOUNT_PER_LINE)+index-4][0] == 1 && att_zigzag_noise_pop[((index-4<0)*CHAR_AMOUNT_PER_LINE)+index-4][1] == 4 ))
+        {
             return flavour.generateNoise(x, y);
         } else {
             return 0.0;

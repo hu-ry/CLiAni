@@ -9,9 +9,10 @@
 
 #include <stdexcept>
 #include <memory>
+#include <utilz/global.h>
 #include <model/flavour/flavour.h>
 
-#define CHAR_AMOUNT_PER_LINE 120
+#define CHAR_AMOUNT_PER_LINE WINDOW_LINE_WIDTH
 #define CHAR_REPEAT_HEIGHT 256
 
 #define SYMBOL_VARIETY 10
@@ -31,8 +32,13 @@ namespace tasty {
 
 
     /**
+     * Enables Clani a per line output mode of characters in form of for example
+     * a scrolling image with different kind of effects applied on them.
+     * For proper initialization after constructor invocation setVariety() and
+     * assignFlavour() should be called for desired properties of output.
      *
-     *
+     * @remark Its recommended to not set t_size higher than the maximum width
+     *         of the used flavour full grid width(128 normally).
      */
     class CharIteration {
     private:
