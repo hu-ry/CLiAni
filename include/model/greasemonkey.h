@@ -24,15 +24,14 @@ namespace CliAniHury {
 
         ~GreaseMonkey();
 
-        void setup(int seed, int flavour);
+        void setup(int seed, int flavour, int attribute);
         const char* runIteration();
 
         void setCharacters(const char *addChars, int amount);
 
     private:
         tasty::Flavour* _usedFlavour;
-        tasty::CharIteration<tasty::Flavour> _currIteration =
-                tasty::CharIteration<tasty::Flavour>(CHAR_AMOUNT_PER_LINE);
+        tasty::CharIteration _currIteration = tasty::CharIteration(CHAR_AMOUNT_PER_LINE);
 
         std::string _inputChars;
         unsigned int _inputCharSize;

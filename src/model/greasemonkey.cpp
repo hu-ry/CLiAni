@@ -6,7 +6,6 @@
 
 
 #include <model/greasemonkey.h>
-#include <utilz/global.h>
 
 namespace CliAniHury {
 
@@ -20,7 +19,7 @@ namespace CliAniHury {
         delete _usedFlavour;
     }
 
-    void GreaseMonkey::setup(int seed, int flavour) {
+    void GreaseMonkey::setup(int seed, int flavour, int attribute) {
         delete _usedFlavour;
 
         switch(flavour) {
@@ -40,7 +39,26 @@ namespace CliAniHury {
                 _usedFlavour = new tasty::Flavour();
         }
 
-        _currIteration.assignFlavour(_usedFlavour);
+        switch(attribute) {
+            case ATTRIBUTE_SCROLLING:
+                _currIteration.assignFlavour(_usedFlavour, &tasty::noise_scrolling);
+                break;
+            case ATTRIBUTE_RAINING:
+                _currIteration.assignFlavour(_usedFlavour, &tasty::noise_raining);
+                break;
+            case ATTRIBUTE_ZIGZAG:
+                _currIteration.assignFlavour(_usedFlavour, &tasty::noise_zigzag);
+                break;
+            case ATTRIBUTE_ZIGZAG_LEGACY:
+                _currIteration.assignFlavour(_usedFlavour, &tasty::noise_zigzag_legacy);
+                break;
+            case ATTRIBUTE_STATIC:
+                _currIteration.assignFlavour(_usedFlavour, &tasty::noise_static);
+                break;
+            default:
+                _currIteration.assignFlavour(_usedFlavour, &tasty::noise_scrolling);
+        }
+
         _currIteration.setVariety(_inputChars, _ranges);
     }
 
