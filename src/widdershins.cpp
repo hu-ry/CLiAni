@@ -29,7 +29,13 @@ namespace CliAniHury {
 
     void Widdershins::start() {
         // Sets up commandline for output
-        _View->init();
+        int opmode = _View->init();
+
+        if(opmode == 0) {
+            _View->fastExit();
+        }
+
+        _View->runMainMenu();
 
         int n = MAX_INPUT_CHAR;
         char uinput2[n];

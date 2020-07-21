@@ -7,8 +7,6 @@
 #ifndef CLIANIMATION_CLIVIEW_H
 #define CLIANIMATION_CLIVIEW_H
 
-#include <menu.h>
-
 namespace CliAniHury {
 
 
@@ -17,7 +15,14 @@ namespace CliAniHury {
         CliView();
         ~CliView();
 
-        void init();
+        /**
+         * Initializes ncurses and runs the start menu asking user for op mode
+         *
+         * @return 0 if successful and exit, 1 for scroll mode and 2 for frame mode
+         */
+        int init();
+        void runMainMenu();
+        void fastExit();
 
         void removeBottomLine();
         void printAt(int x, int y, const char *printStr);
@@ -25,7 +30,7 @@ namespace CliAniHury {
         int requestUserSeed(char *input, int n);
 
         /**
-         * UNUSED FUNCTION!
+         * @deprecated UNUSED FUNCTION!
          */
         void drawAll();
         void waiting(int time);
@@ -35,10 +40,14 @@ namespace CliAniHury {
 
     private:
         const char* _defaultChars = ".:\"=edD#B@_";
+        void* _MainMenu;
 
         int option_index = -1;
         int c;
 
+        /**
+         * @deprecated Old clani menu. Do not use anymore!
+         */
         void runStartMenu();
 
         const char *choices[5] = {
@@ -47,7 +56,7 @@ namespace CliAniHury {
                 "Cell Voronoi",
                 "Placeholder 2",
                 "the Exit"
-                };
+        };
 
         const char *effectChoices[5] = {
                 "Scrolling",

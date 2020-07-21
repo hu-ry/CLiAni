@@ -10,6 +10,16 @@
 #define WINDOW_LINE_HEIGHT 40
 #define WINDOW_LINE_WIDTH 120
 
+#define SYMBOL_VARIETY 10
+
+union selection {
+    int option_l;
+    struct {
+        short taste;
+        short effect;
+    } option_s;
+};
+
 enum e_Flavour{
     FLAVOUR_PERLIN = 0,
     FLAVOUR_VORONOI,
