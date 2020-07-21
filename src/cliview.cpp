@@ -206,10 +206,10 @@ namespace CliAniHury {
 
         unpost_menu(selMenu);
 
+        free_menu(selMenu);
         for(i = 0; i < n_choices; ++i) {
             free_item(optionItems[i]);
         }
-        free_menu(selMenu);
 
         delete[]optionItems;
 
