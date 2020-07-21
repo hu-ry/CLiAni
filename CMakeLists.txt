@@ -8,7 +8,7 @@ SET(CMAKE_CXX_FLAGS "-O3 -Wall -pthread -fcheck-new -g ")
 SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ")
 SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ")
 
-link_libraries(-lncurses -lmenu)
+link_libraries(-lncurses -lmenu −lpanel)
 
 include_directories(include)
 

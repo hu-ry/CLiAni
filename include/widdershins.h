@@ -12,6 +12,11 @@
 
 namespace CliAniHury {
 
+    void scrollmode_run(CliView &view, GreaseMonkey &engine);
+    void framemode_run(CliView &view, GreaseMonkey &engine);
+
+    typedef void (*opmode_run_func) (CliView &, GreaseMonkey &);
+
     class Widdershins {
     public:
         Widdershins();
@@ -27,6 +32,7 @@ namespace CliAniHury {
     private:
         CliView* _View;
         GreaseMonkey _Engine;
+        opmode_run_func _RunFunc = nullptr;
 
     };
 }; // end of namespace CliAniHury
