@@ -10,7 +10,10 @@
 #define WINDOW_LINE_HEIGHT 40
 #define WINDOW_LINE_WIDTH 120
 
+#define INPUT_SEED_MAXLENGTH 8
 #define SYMBOL_VARIETY 10
+
+#define KEY_ALT_BACKSPACE 127
 
 union selection {
     int option_l;

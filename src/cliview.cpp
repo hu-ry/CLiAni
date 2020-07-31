@@ -58,23 +58,26 @@ namespace CliAniHury {
         // Runs the first part of the main menu and handles the user input
         _MainMenu = new Decidecation();
         Decidecation* decider = static_cast<Decidecation*>(_MainMenu);
-
-        decider->deleteWin(decider->_OpModeWindow);
-
-        return 0;
+        return decider->runStarter();
     }
 
     void CliView::runMainMenu() {
+        for(int i=0; i < SYMBOL_VARIETY; i++) {
+            _variety[i] = _defaultChars[i];
+        }
         Decidecation* decider = static_cast<Decidecation*>(_MainMenu);
         // Runs the second part of the main menu,
         // which handles the most of the user input(e.g. seed, config)
-
-
-        decider->abort();
-        delete static_cast<Decidecation*>(_MainMenu);
-        //curs_set(1);
-        clear();
-        refresh();
+        if(!decider->runDecider(_seed, _variety, &_select)) {
+            decider->abort();
+            fastExit();
+        } else {
+            decider->abort();
+            delete static_cast<Decidecation*>(_MainMenu);
+            //curs_set(1);
+            clear();
+            refresh();
+        }
     }
 
     void CliView::fastExit() {

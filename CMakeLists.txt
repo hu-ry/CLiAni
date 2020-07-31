@@ -16,4 +16,5 @@ add_executable(clani
         src/main.cpp src/cliview.cpp src/widdershins.cpp
         src/model/greasemonkey.cpp src/model/flavour/flavour.cpp
         src/model/flavour/perlinnoise.cpp src/model/flavour/voronoi.cpp
-        src/model/flavour/cellular.cpp src/model/noiseattribute.cpp src/decidecation.cpp)
+        src/model/flavour/cellular.cpp src/model/noiseattribute.cpp
+        src/decidecation.cpp src/menuskins.cpp)

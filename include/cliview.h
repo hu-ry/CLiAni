@@ -7,6 +7,8 @@
 #ifndef CLIANIMATION_CLIVIEW_H
 #define CLIANIMATION_CLIVIEW_H
 
+#include <utilz/global.h>
+
 namespace CliAniHury {
 
 
@@ -40,6 +42,10 @@ namespace CliAniHury {
 
     private:
         const char* _defaultChars = ".:\"=edD#B@_";
+        char _variety[SYMBOL_VARIETY+1];
+        char _seed[INPUT_SEED_MAXLENGTH+1] = "1\000";
+        // Beautiful initialized struct in union
+        selection _select = selection{.option_s{.taste=1, .effect=0}};
         void* _MainMenu;
 
         int option_index = -1;

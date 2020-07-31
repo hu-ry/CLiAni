@@ -21,6 +21,8 @@ namespace CliAniHury {
     struct DcdMenu {
         int id;
         int items_Amount;
+        int width = 0;
+        const char* title{};
         MENU *menu;
         ITEM **items;
 
@@ -35,6 +37,15 @@ namespace CliAniHury {
             //
             menu_opts_off(menu, O_SHOWDESC);
         }
+        explicit DcdMenu(int t_id, const char **t_labels, const char **t_descs, int t_amount)
+                : id(t_id), items_Amount(t_amount) {
+            items = new ITEM *[items_Amount + 1];
+            for (int i = 0; i < items_Amount; ++i) {
+                items[i] = new_item(t_labels[i], t_descs[i]);
+            }
+            items[items_Amount] = (ITEM *) NULL;
+            menu = new_menu((ITEM **) items);
+        }
 
         ~DcdMenu() {
             for (int i = 0; i < items_Amount; ++i) {
@@ -45,6 +56,10 @@ namespace CliAniHury {
             delete[]items;
         }
     };
+
+#define DCD_MENU_WIDTH 40
+#define DCD_MENU_HEIGHT 16
+#define DCD_MENU_MAX_LABEL_SIZE 14
 
 #define DCD_OP_MODE_AMOUNT 2
 
@@ -57,75 +72,6 @@ namespace CliAniHury {
 #define DCD_FRAME_TASTE_AMOUNT 3
 #define DCD_FRAME_EFFECT_AMOUNT 2
 
-// ---------------------Choose Operation Mode----------------------
-    static const char *dcd_operation_modes[DCD_OP_MODE_AMOUNT] = {
-            "Scroll Mode",
-            "Frame Mode"
-    };
-
-// ---------------------Scroll Operation Mode----------------------
-    static const char *dcd_scrll_opt_choices[DCD_SCRLL_OPTION_AMOUNT] = {
-            "Start",
-            "Flavour:",
-            "Effect:",
-            "Seed: ",
-            "Variation:",
-            "SHOW ME THE"
-    };
-
-    static const char *dcd_scrll_opt_default_selection[DCD_SCRLL_OPTION_AMOUNT] = {
-            "",
-            "Voronoi",
-            "Scrolling",
-            "1",
-            ".:\"=edD#B@",
-            "EXIT PLEASE!"
-    };
-
-    static const char *dcd_scrll_taste_choices[DCD_SCRLL_TASTE_AMOUNT] = {
-            "Perlin Noise",
-            "Voronoi",
-            "Cell Voronoi",
-            "Placeholder 1"
-    };
-
-    static const char *dcd_scrll_effect_choices[DCD_SCRLL_EFFECT_AMOUNT] = {
-            "Scrolling",
-            "Raining",
-            "Zig-Zag",
-            "Zig-Zag Legacy",
-            "Static"
-    };
-
-// ---------------------Frame Operation Mode----------------------
-    static const char *dcd_frame_opt_choices[DCD_FRAME_OPTION_AMOUNT] = {
-            "Start",
-            "Scene:",
-            "Effect:",
-            "Seed: ",
-            "Variation:",
-            "SHOW ME THE"
-    };
-
-    static const char *dcd_frame_opt_default_selection[DCD_FRAME_OPTION_AMOUNT] = {
-            "",
-            "Cube",
-            "None",
-            "1",
-            ".:\"=edD#B@",
-            "EXIT PLEASE!"
-    };
-
-    static const char *dcd_frame_taste_choices[DCD_FRAME_TASTE_AMOUNT] = {
-            "Cube",
-            "Placeholder 1",
-            "Placeholder 2"
-    };
-
-    static const char *dcd_frame_effect_choices[DCD_FRAME_EFFECT_AMOUNT] = {
-            "None",
-            "Inverted"
-    };
 
     enum DcdSlideOrigin{
         SLIDE_TOP,
@@ -134,14 +80,45 @@ namespace CliAniHury {
         SLIDE_BOT
     };
 
+    class DcdIconSkin {
+    public:
+        DcdIconSkin();
+        DcdIconSkin(int t_height, int t_width);
 
+        void drawIcon(WINDOW *win);
+
+        const char* _Icon;
+
+    private:
+        int _Width = DCD_MENU_WIDTH;
+        int _Height = DCD_MENU_HEIGHT;
+    };
+
+
+    /**
+     * Decidecation is more or less a singleton class which handles the usage of
+     * menu and windows of the ncurses library at the start of the program for
+     * clani.
+     *
+     * @c This new word "Decidecation" is my part in contributing to the english
+     * language through neologism
+     */
     class Decidecation {
     public:
         Decidecation();
 
         ~Decidecation();
 
-        void runDecider(int *seed, char *variety, selection *select);
+        int runStarter();
+
+        /**
+         *
+         * @param seed
+         * @param variety
+         * @param select
+         * @return 1 if successful and 0 for exit
+         */
+        int runDecider(char *seed, char *variety, selection *select);
 
         /**
          * Enables a premature deallocation and/or exit of the menu
@@ -150,21 +127,22 @@ namespace CliAniHury {
 
         WINDOW *_HeaderWindow = nullptr;
         WINDOW *_OpModeWindow = nullptr;
-        DcdMenu *_OpModeMenu = nullptr;
 
         WINDOW *createWin(int height, int width, int starty, int startx);
         void deleteWin(WINDOW *win_to_destroy);
 
-        DcdMenu *createSlideMenu(WINDOW *destWin, DcdSlideOrigin origin);
-        void deleteSlideMenu(WINDOW *destWin, DcdSlideOrigin origin);
 
     private:
-        std::map<int, std::pair<bool, std::pair<WINDOW*, DcdMenu*>>> activeWins;
+        int _OperationMode = -1;
+        int _Cols;
+        int _Lines;
 
+        char _InputSeed[INPUT_SEED_MAXLENGTH+1] = "1";
+        char _InputVariety[SYMBOL_VARIETY+1];
 
         WINDOW *_LeftOptWindow = nullptr;
         WINDOW *_RightOptWindow = nullptr;
-        //DcdMenu(0, dcd_operation_modes, DCD_OP_MODE_AMOUNT);
+
         DcdMenu *_ScrllOptionMenu = nullptr;
         DcdMenu *_ScrllTasteMenu = nullptr;
         DcdMenu *_ScrllEffectMenu = nullptr;
@@ -172,6 +150,28 @@ namespace CliAniHury {
         DcdMenu *_FrameTasteMenu = nullptr;
         DcdMenu *_FrameEffectMenu = nullptr;
 
+
+        /**
+         *
+         * @param localMenu : current active menu
+         * @param subWin : sub WINDOW which holds the items
+         * @return -1 on exit or index from 0 - n for selected item
+         */
+        int runSelectMenu(DcdMenu *localMenu, WINDOW *subWin);
+
+        void runSeedInput(DcdMenu *localMenu, WINDOW *subWin);
+        void runVariationInput(DcdMenu *localMenu, WINDOW *subWin);
+
+        /**
+         * Draws the menu and his box in as a whole. Doesn't call refresh() nor
+         * wrefresh().
+         * @remark Menu should be posted first preferably before calling this!
+         * @param win : pointer to menu WINDOW
+         * @param title : string as caption for menu
+         * @param width : int of width for menu window
+         */
+        void drawMenu(WINDOW *win, const char *title, int width);
+        void onResize();
         void refreshAllWindows();
 
     };
