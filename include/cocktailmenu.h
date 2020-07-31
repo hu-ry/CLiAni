@@ -128,6 +128,8 @@ namespace CliAniHury {
         WINDOW *_HeaderWindow = nullptr;
         WINDOW *_OpModeWindow = nullptr;
 
+        DcdIconSkin *_ClaniBanner;
+
         WINDOW *createWin(int height, int width, int starty, int startx);
         void deleteWin(WINDOW *win_to_destroy);
 

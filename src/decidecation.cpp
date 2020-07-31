@@ -85,11 +85,11 @@ namespace CliAniHury {
     Decidecation::Decidecation() {
         this->_Cols = COLS;
         this->_Lines = LINES;
-
+        _ClaniBanner = new DcdIconSkin(10, 64);
     }
 
     Decidecation::~Decidecation() {
-
+        delete _ClaniBanner;
     }
 
     int Decidecation::runStarter() {
@@ -98,8 +98,8 @@ namespace CliAniHury {
 
 
         int headerHeight = 14;
-        int headerWidth = max_x;
-        _HeaderWindow = createWin(headerHeight, headerWidth, 0, 0);
+        int headerWidth = 66;
+        _HeaderWindow = createWin(headerHeight, headerWidth, 2, max_x/2 - headerWidth/2);
 
         int opHeight = 8;
         int opWidth = 39;
@@ -118,10 +118,12 @@ namespace CliAniHury {
 
         post_menu(opMenu.menu);
 
+        _ClaniBanner->drawIcon(_HeaderWindow);
         drawMenu(_OpModeWindow, opTitle, opWidth);
         mvprintw(max_y - 2, 0, "F1 to EXIT and CTRL+C to exit during runtime");
         mvprintw(0, max_x - 15, "Made by hury :D");
 
+        wrefresh(_HeaderWindow);
         wrefresh(_OpModeWindow);
 
         int c, enter = 0;
@@ -131,6 +133,7 @@ namespace CliAniHury {
                     clear();
                     getmaxyx(stdscr, max_y, max_x);
                     mvwin(_OpModeWindow, headerHeight + 2, max_x < opWidth ? 0 : max_x / 2 - opWidth / 2);
+                    mvwin(_HeaderWindow, 2, max_x < headerWidth ? 0 : max_x / 2 - headerWidth / 2);
                     break;
                 case KEY_DOWN:
                     clear();
@@ -149,11 +152,13 @@ namespace CliAniHury {
                     enter++;
                     break;
             }
+            _ClaniBanner->drawIcon(_HeaderWindow);
             drawMenu(_OpModeWindow, opTitle, opWidth);
 
             mvprintw(max_y - 2, 0, "F1 to EXIT and CTRL+C to exit during runtime");
             mvprintw(0, max_x-15, "Made by hury :D");
             refresh();
+            wrefresh(_HeaderWindow);
             wrefresh(_OpModeWindow);
         }
 
@@ -218,8 +223,11 @@ namespace CliAniHury {
 
             clear();
             post_menu(_ScrllOptionMenu->menu);
+
+            _ClaniBanner->drawIcon(_HeaderWindow);
             drawMenu(_LeftOptWindow, leftTitle, leftWidth);
             rightOptIcon.drawIcon(_RightOptWindow);
+
             refresh();
             refreshAllWindows();
 
@@ -302,8 +310,10 @@ namespace CliAniHury {
                     default:
                         break;
                 }
+                _ClaniBanner->drawIcon(_HeaderWindow);
                 drawMenu(_LeftOptWindow, leftTitle, leftWidth);
                 rightOptIcon.drawIcon(_RightOptWindow);
+
                 refresh();
                 refreshAllWindows();
             }
@@ -346,7 +356,9 @@ namespace CliAniHury {
 
     int Decidecation::runSelectMenu(DcdMenu *localMenu, WINDOW *subWin) {
         post_menu(localMenu->menu);
+        _ClaniBanner->drawIcon(_HeaderWindow);
         drawMenu(subWin->_parent, localMenu->title, localMenu->width);
+
         refresh();
         wrefresh(subWin->_parent);
 
@@ -382,8 +394,10 @@ namespace CliAniHury {
                 default:
                     break;
             }
+            _ClaniBanner->drawIcon(_HeaderWindow);
             drawMenu(subWin->_parent, localMenu->title, localMenu->width);
             drawMenu(_LeftOptWindow, _ScrllOptionMenu->title, _ScrllOptionMenu->width);
+
             refresh();
             refreshAllWindows();
         }

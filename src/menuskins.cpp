@@ -8,6 +8,20 @@
 
 namespace CliAniHury {
 
+    const char* dcd_isometric_clani_banner = {
+            "      ___           ___       ___           ___                 \n"
+            "     /\\  \\         /\\__\\     /\\  \\         /\\__\\          ___   \n"
+            "    /::\\  \\       /:/  /    /::\\  \\       /::|  |        /\\  \\  \n"
+            "   /:/\\:\\  \\     /:/  /    /:/\\:\\  \\     /:|:|  |        \\:\\  \\ \n"
+            "  /:/  \\:\\  \\   /:/  /    /::\\~\\:\\  \\   /:/|:|  |__      /::\\__\\\n"
+            " /:/__/ \\:\\__\\ /:/__/    /:/\\:\\ \\:\\__\\ /:/ |:| /\\__\\  __/:/\\/__/\n"
+            " \\:\\  \\  \\/__/ \\:\\  \\    \\/__\\:\\/:/  / \\/__|:|/:/  / /\\/:/  /   \n"
+            "  \\:\\  \\        \\:\\  \\        \\::/  /      |:/:/  /  \\::/__/    \n"
+            "   \\:\\  \\        \\:\\  \\       /:/  /       |::/  /    \\:\\__\\    \n"
+            "    \\:\\__\\        \\:\\__\\     /:/  /        /:/  /      \\/__/    \n"
+            "     \\/__/         \\/__/     \\/__/         \\/__/                "
+    };
+
     const char* dcd_icon_earth = {
             "BBBBBBBBBBBBBBBBBBBNNBBBBBBBBBBBBBBBBBBB"
             "BBBBBBBBBBB$X)<**1\"^\"\"\"\\?{SmQBBBBBBBBBBB"
@@ -34,7 +48,7 @@ namespace CliAniHury {
     DcdIconSkin::DcdIconSkin(int t_height, int t_width) {
         _Width = t_width;
         _Height = t_height;
-
+        _Icon = dcd_isometric_clani_banner;
     }
 
     void DcdIconSkin::drawIcon(WINDOW *win) {
