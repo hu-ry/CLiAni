@@ -419,7 +419,7 @@ namespace CliAniHury {
 
     void Decidecation::runSeedInput(DcdMenu *localMenu, WINDOW *subWin) {
         int itemPosY = 3;
-        int itemPosX = 16;
+        int itemPosX = 18;
 
         const char* emptyField = {"        "};
         int backspace = ' ';
@@ -471,7 +471,7 @@ namespace CliAniHury {
 
     void Decidecation::runVariationInput(DcdMenu *localMenu, WINDOW *subWin) {
         int itemPosY = 4;
-        int itemPosX = 16;
+        int itemPosX = 18;
 
         const char* emptyField = {"          "};
         int backspace = ' ';
