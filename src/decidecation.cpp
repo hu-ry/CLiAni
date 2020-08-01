@@ -161,7 +161,6 @@ namespace CliAniHury {
             wrefresh(_HeaderWindow);
             wrefresh(_OpModeWindow);
         }
-
         unpost_menu(opMenu.menu);
 
         clear();

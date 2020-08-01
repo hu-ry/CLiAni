@@ -48,10 +48,10 @@ namespace CliAniHury {
         }
 
         ~DcdMenu() {
+            free_menu(menu);
             for (int i = 0; i < items_Amount; ++i) {
                 free_item(items[i]);
             }
-            free_menu(menu);
 
             delete[]items;
         }
