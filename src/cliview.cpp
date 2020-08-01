@@ -1,6 +1,3 @@
-//╔═══════════════════════════════════════════════════════════════════════════════════════╗
-//║▒░░▒▒░░▒▒▒░░▒▒▒░░▒▒░░▒▒▒▒░░▒▒▒░░▒▒▒▒▒▒▒░░▒░░▒▒▒▒░░▒▒░░▒▒▒░░▒▒▒▒░░▒▒░░▒▒▒░░▒▒▒▒▒▒░░▒▒░░▒║
-//╚═══════════════════════════════════════════════════════════════════════════════════════╝
 //##############################################################################
 //## Project: ClAni ########################### Created by hury on 17.04.2020 ##
 //##############################################################################
@@ -8,12 +5,11 @@
 //##############################################################################
 
 
-#include <menu.h>
 #include <cstdlib>
-
-#include <cliview.h>
-#include <utilz/global.h>
 #include <cstring>
+
+#include <cocktailmenu.h>
+#include <cliview.h>
 
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
@@ -36,9 +32,6 @@ namespace CliAniHury {
     CliView::CliView() {
         // starting curses
         initscr();
-
-
-        //printf("Created instance of CliView!\n");
     }
 
     CliView::~CliView() {
@@ -47,11 +40,9 @@ namespace CliAniHury {
         clear();
         // exiting curses
         endwin();
-
-        //printf("Deleted instance of CliView!\n");
     }
 
-    void CliView::init() {
+    int CliView::init() {
         // Disables line buffering from ncurses
         cbreak();
         // Disables echoing of user input
@@ -64,12 +55,44 @@ namespace CliAniHury {
         // Enable keyboard input and starting menu
         keypad(stdscr, TRUE);
 
-        // Runs the StartMenu and handles all the user input
-        runStartMenu();
+        // Runs the first part of the main menu and handles the user input
+        _MainMenu = new Decidecation();
+        Decidecation* decider = static_cast<Decidecation*>(_MainMenu);
+        return decider->runStarter();
+    }
 
-        curs_set(1);
+    void CliView::runMainMenu() {
+        for(int i=0; i < SYMBOL_VARIETY; i++) {
+            _variety[i] = _defaultChars[i];
+        }
+        _variety[SYMBOL_VARIETY] = '\0';
+        Decidecation* decider = static_cast<Decidecation*>(_MainMenu);
+        // Runs the second part of the main menu,
+        // which handles the most of the user input(e.g. seed, config)
+        if(!decider->runDecider(_seed, _variety, &_select)) {
+            decider->abort();
+            fastExit();
+        } else {
+            decider->abort();
+            delete static_cast<Decidecation*>(_MainMenu);
+            //curs_set(1);
+            clear();
+            refresh();
+        }
+    }
+
+    void CliView::fastExit() {
+        // deallocate and stop menu
+        static_cast<Decidecation*>(_MainMenu)->abort();
+        delete static_cast<Decidecation*>(_MainMenu);
+
+        nocbreak();
+        echo();
         clear();
         refresh();
+        // exiting curses
+        endwin();
+        exit(0);
     }
 
     void CliView::removeBottomLine() {
@@ -228,11 +251,20 @@ namespace CliAniHury {
     }
 
     void CliView::waiting(int time) {
-        napms(100);
+        napms(time);
     }
 
-    int CliView::getSelection() {
-        return option_index;
+    selection CliView::getSelection() {
+        return _select;
     }
+
+    int CliView::getSeed() {
+        return char_to_decimal(_seed, strlen(_seed));
+    }
+
+    const char* CliView::getVariety() {
+        return _variety;
+    }
+
 
 }; // end of namespace CliAniHury

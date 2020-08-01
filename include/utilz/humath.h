@@ -34,4 +34,21 @@ inline float smoothstep(float edge0, float edge1, float x) {
     return x * x * (3 - 2 * x);
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+
+inline float sqrt_aprox(float base) {
+    int i;
+    float x, y;
+    x = base * 0.5;
+    y = base;
+    i = * (int * ) &y;
+    i = 0x5f3759df - (i >> 1);
+    y = * ( float * ) &i;
+    y = y * (1.5 - (x * y * y));
+    y = y * (1.5 - (x * y * y));
+    return base * y;
+}
+#pragma GCC diagnostic pop
+
 #endif //CLIANIMATION_HUMATH_H
