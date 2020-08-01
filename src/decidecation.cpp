@@ -325,7 +325,17 @@ namespace CliAniHury {
         } else if(_OperationMode == 2) {
 
         }
-
+        clear();
+        _ClaniBanner->drawIcon(_HeaderWindow);
+        refresh();
+        napms(50);
+        int acceleration = 2;
+        for(int k=1; k<=15; k++) {
+            wmove(_HeaderWindow, 0, 0);
+            wdeleteln(_HeaderWindow);
+            wrefresh(_HeaderWindow);
+            napms(300-acceleration*k);
+        }
 
         clear();
         refresh();
