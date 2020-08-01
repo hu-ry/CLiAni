@@ -47,7 +47,7 @@ namespace CliAniHury {
         char _variety[SYMBOL_VARIETY+1];
         char _seed[INPUT_SEED_MAXLENGTH+1] = "1\000";
         // Beautiful initialized struct in union
-        selection _select = selection{.option_s{.taste=1, .effect=0}};
+        selection _select = selection{.option_s={.taste=1, .effect=0}};
         void* _MainMenu;
 
         int option_index = -1;
