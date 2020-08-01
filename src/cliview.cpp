@@ -65,6 +65,7 @@ namespace CliAniHury {
         for(int i=0; i < SYMBOL_VARIETY; i++) {
             _variety[i] = _defaultChars[i];
         }
+        _variety[SYMBOL_VARIETY] = '\0';
         Decidecation* decider = static_cast<Decidecation*>(_MainMenu);
         // Runs the second part of the main menu,
         // which handles the most of the user input(e.g. seed, config)
@@ -253,8 +254,17 @@ namespace CliAniHury {
         napms(time);
     }
 
-    int CliView::getSelection() {
-        return option_index;
+    selection CliView::getSelection() {
+        return _select;
     }
+
+    int CliView::getSeed() {
+        return char_to_decimal(_seed, strlen(_seed));
+    }
+
+    const char* CliView::getVariety() {
+        return _variety;
+    }
+
 
 }; // end of namespace CliAniHury

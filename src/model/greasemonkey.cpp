@@ -6,6 +6,7 @@
 
 
 #include <model/greasemonkey.h>
+#include <utilz/global.h>
 
 namespace CliAniHury {
 
@@ -19,7 +20,37 @@ namespace CliAniHury {
         delete _usedFlavour;
     }
 
-    void GreaseMonkey::setup(int seed, int flavour, int attribute) {
+    void GreaseMonkey::setup(int opm, int seed, selection taste) {
+
+        if(opm == 1) {
+            initFlavour(taste.option_s.taste, taste.option_s.effect, seed);
+        } else {
+
+        }
+
+    }
+
+    const char* GreaseMonkey::runIteration() {
+        return _currIteration.runRow();
+    }
+
+    const char* GreaseMonkey::runFrame() {
+        // TODO: Give this something to output!
+        return nullptr;
+    }
+
+    void GreaseMonkey::setCharacters(const char *addChars, int amount) {
+        if(amount > MAX_INPUT_CHAR) {
+            amount = MAX_INPUT_CHAR;
+        }
+        _inputCharSize = amount;
+        for (int i = 0; i < amount; i++) {
+            _inputChars[i] = addChars[i];
+        }
+
+    }
+
+    void GreaseMonkey::initFlavour(int flavour, int attribute, int seed) {
         delete _usedFlavour;
 
         switch(flavour) {
@@ -62,18 +93,7 @@ namespace CliAniHury {
         _currIteration.setVariety(_inputChars, _ranges);
     }
 
-    const char* GreaseMonkey::runIteration() {
-        return _currIteration.runRow();
-    }
-
-    void GreaseMonkey::setCharacters(const char *addChars, int amount) {
-        if(amount > MAX_INPUT_CHAR) {
-            amount = MAX_INPUT_CHAR;
-        }
-        _inputCharSize = amount;
-        for (int i = 0; i < amount; i++) {
-            _inputChars[i] = addChars[i];
-        }
+    void GreaseMonkey::initScene(int scene, int effect, int seed) {
 
     }
 

@@ -37,22 +37,13 @@ namespace CliAniHury {
 
         _View->runMainMenu();
 
-        int n = MAX_INPUT_CHAR;
-        char uinput2[n];
-        // Asks User for optional character variation
-        _View->requestCharacters(uinput2, n);
-        _Engine.setCharacters(uinput2, n);
-
-        n = 8;
-        char uinput1[n];
-        // Asks User for an optional Seed
-        int seed = _View->requestUserSeed(uinput1, n);
+        _Engine.setCharacters(_View->getVariety(), SYMBOL_VARIETY);
 
         // Scrollmode run function pointer assigned
         _RunFunc = scrollmode_run;
 
         // Preparing model and noise functions for operating
-        _Engine.setup(seed, _View->getSelection(), 0);
+        _Engine.setup(opmode, _View->getSeed(), _View->getSelection());
     }
 
     void Widdershins::runFrame(int time) {

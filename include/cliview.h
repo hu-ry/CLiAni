@@ -37,7 +37,9 @@ namespace CliAniHury {
         void drawAll();
         void waiting(int time);
 
-        int getSelection();
+        selection getSelection();
+        int getSeed();
+        const char* getVariety();
 
 
     private:
