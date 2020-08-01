@@ -15,7 +15,6 @@
 #define CHAR_AMOUNT_PER_LINE WINDOW_LINE_WIDTH
 #define CHAR_REPEAT_HEIGHT 256
 
-#define SYMBOL_VARIETY 10
 
 namespace tasty {
 

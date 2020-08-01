@@ -22,7 +22,7 @@ namespace tasty {
     protected:
         /**
          *
-         * @c !!!DEPRECATED AND UNUSED FUNCTION!!!
+         * @deprecated !!!DEPRECATED AND UNUSED FUNCTION!!!
          *
          * @param xLocal : int current x pixel
          * @param yLocal : int current y pixel
@@ -37,7 +37,7 @@ namespace tasty {
 
         /**
          *
-         * @c !!!DEPRECATED AND UNUSED FUNCTION!!!
+         * @deprecated !!!DEPRECATED AND UNUSED FUNCTION!!!
          *
          * @param xLocal : int current x pixel
          * @param yLocal : int current y pixel

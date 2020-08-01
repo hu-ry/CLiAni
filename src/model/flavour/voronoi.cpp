@@ -11,6 +11,9 @@
 namespace tasty {
 
     double Voronoi::generateNoise(int x, int y) {
+        x = x % VORONOI_WIDTH;
+        y = y % VORONOI_HEIGHT;
+
         int bottomLeft_X = (x - (x % VORONOI_GRID_SCALE));
         int bottomLeft_Y = (y - (y % VORONOI_GRID_SCALE));
 
@@ -19,29 +22,12 @@ namespace tasty {
         int maxTileX, maxTileY, tileX, tileY;
 
         // For checking bounds
-        if (bottomLeft_X == 0) {
-            tileX = bottomLeft_X / VORONOI_GRID_SCALE;
-        } else {
-            tileX = (bottomLeft_X / VORONOI_GRID_SCALE) - 1;
-        }
-
-        //if (bottomLeft_Y == 0) {
-        //    tileY = bottomLeft_Y / VORONOI_GRID_SCALE;
-        //} else {
+        tileX = (bottomLeft_X / VORONOI_GRID_SCALE) - (bottomLeft_X != 0);
         tileY = (bottomLeft_Y / VORONOI_GRID_SCALE) - 1;
-        //}
 
-        if (bottomLeft_X + VORONOI_GRID_SCALE == VORONOI_WIDTH) {
-            maxTileX = bottomLeft_X / VORONOI_GRID_SCALE;
-        } else {
-            maxTileX = (bottomLeft_X / VORONOI_GRID_SCALE) + 1;
-        }
-
-        //if (bottomLeft_Y + VORONOI_GRID_SCALE == VORONOI_HEIGHT) {
-        //    maxTileY = bottomLeft_Y / VORONOI_GRID_SCALE;
-        //} else {
+        maxTileX = (bottomLeft_X / VORONOI_GRID_SCALE)
+                 + (bottomLeft_X + VORONOI_GRID_SCALE != VORONOI_WIDTH);
         maxTileY = (bottomLeft_Y / VORONOI_GRID_SCALE) + 1;
-        //}
 
         // Calc closest point through neighbouring grids
         for (int yi = tileY; yi < maxTileY + 1; yi++) {
@@ -50,8 +36,6 @@ namespace tasty {
             }
         }
         double result = (minDist / VORONOI_GRID_SCALE);
-
-        //result -= abs(sin(80.0*result))*0.8;
 
         return result;
     }

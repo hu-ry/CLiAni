@@ -24,8 +24,9 @@ namespace CliAniHury {
 
         ~GreaseMonkey();
 
-        void setup(int seed, int flavour, int attribute);
+        void setup(int opm, int seed, selection taste);
         const char* runIteration();
+        const char* runFrame();
 
         void setCharacters(const char *addChars, int amount);
 
@@ -39,6 +40,8 @@ namespace CliAniHury {
         float _ranges[MAX_INPUT_CHAR] = {0.1, 0.2, 0.3, 0.38,
                            0.47, 0.56, 0.64, 0.71, 0.83, 999.0};
 
+        void initFlavour(int flavour, int attribute, int seed);
+        void initScene(int scene, int effect, int seed);
     };
 
 }; // end of namespace CliAniHury
