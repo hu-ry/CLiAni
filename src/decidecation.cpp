@@ -334,7 +334,7 @@ namespace CliAniHury {
             wmove(_HeaderWindow, 0, 0);
             wdeleteln(_HeaderWindow);
             wrefresh(_HeaderWindow);
-            napms(300-acceleration*k);
+            napms(250-acceleration*k);
         }
 
         clear();
@@ -454,6 +454,7 @@ namespace CliAniHury {
                     _InputSeed[INPUT_SEED_MAXLENGTH] = '\0';
                     break;
                 case ERR:
+                case 0x1B: // Escape character
                     stop = 1111;
                 default:
                     break;
@@ -494,18 +495,8 @@ namespace CliAniHury {
                     stop = stop - (stop > 0);
                     mvwprintw(subWin, itemPosY, itemPosX+stop, "%s", &backspace);
                     break;
-                //case KEY_ENTER:
-                //case '\n':
-                //    for(int k=stop; k<SYMBOL_VARIETY+1; k++) {
-                //        tempInput[k] = '\0';
-                //    }
-                //    stop = SYMBOL_VARIETY;
-                //    for(int i=0; i<SYMBOL_VARIETY; i++) {
-                //        _InputVariety[i] = tempInput[i];
-                //    }
-                //    _InputVariety[SYMBOL_VARIETY] = '\0';
-                //    break;
                 case ERR:
+                case 0x1B: // Escape character
                     stop = 1111;
                 default:
                     break;
