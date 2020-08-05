@@ -7,6 +7,7 @@
 
 #include <model/flavour/voronoi.h>
 #include <utilz/humath.h>
+#include <cstdlib>
 
 namespace tasty {
 
@@ -61,21 +62,21 @@ namespace tasty {
     }
 
     void Voronoi::precompute_prob_amount(unsigned int seed, int max) {
-        srandom(seed);
+        srand(seed);
         for (int i = 0; i < max; i++) {
-            _ProbabilityAmount[i] = (int) (1 + (random() % VORONOI_MAX_FPOINT_SQUARE));
+            _ProbabilityAmount[i] = (int) (1 + (rand() % VORONOI_MAX_FPOINT_SQUARE));
         }
     }
 
     void Voronoi::generate_fpoints(SquareEntity* grid) {
         for (int i = 0; i < _SquareAmount; i++) {
             grid[i].fp_amount =
-                    _ProbabilityAmount[random() % VORONOI_FP_PROBABILITIES];
+                    _ProbabilityAmount[rand() % VORONOI_FP_PROBABILITIES];
             for (auto &f_point : grid[i].f_points) {
                 f_point.x =
-                        fabs(cos((double) (random() % 250))) * VORONOI_GRID_SCALE;
+                        fabs(cos((double) (rand() % 250))) * VORONOI_GRID_SCALE;
                 f_point.y =
-                        fabs(sin((double) (random() % 250))) * VORONOI_GRID_SCALE;
+                        fabs(sin((double) (rand() % 250))) * VORONOI_GRID_SCALE;
             }
         }
     }

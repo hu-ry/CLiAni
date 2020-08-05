@@ -73,7 +73,7 @@ namespace tasty {
 
         float temp =    (minGrid.x/VORONOI_SQUARE_AMOUNT)+(minGrid.y*2)
                         + roundf(minPoint.y/VORONOI_GRID_SCALE);
-        int shade_index = (int)lroundf32((temp/5)*10);
+        int shade_index = (int)roundf((temp/5)*10);
 
         double result = shades[shade_index];
 

@@ -7,6 +7,7 @@
 
 #include <model/flavour/perlinnoise.h>
 #include <utilz/humath.h>
+#include <cstdlib>
 
 namespace tasty {
 
@@ -15,11 +16,11 @@ namespace tasty {
     }
 
     void PerlinNoise::generate_gradients(unsigned int seed) {
-        srandom(seed);
+        srand(seed);
 
         for (int i = 0; i < _GradSize; i++) {
-            _Gradients[i].x = cos((double) (random() % 6));
-            _Gradients[i].y = sin((double) (random() % 6));
+            _Gradients[i].x = cos((double) (rand() % 6));
+            _Gradients[i].y = sin((double) (rand() % 6));
         }
     }
 
@@ -75,13 +76,13 @@ namespace tasty {
         };
 
 
-        double weight = smooth((double) abs(x_cord - bottomLeft_X)
+        double weight = smooth((double)std::abs(x_cord - bottomLeft_X)
                                / NOISE_GRID_SCALE);
 
         double top = linear_inpo(grid.tl, grid.tr, weight);
         double bot = linear_inpo(grid.bl, grid.br, weight);
 
-        weight = smooth((double)abs(y_cord - (bottomLeft_Y + NOISE_GRID_SCALE))
+        weight = smooth((double)std::abs(y_cord - (bottomLeft_Y + NOISE_GRID_SCALE))
                         / NOISE_GRID_SCALE);
 
         return (linear_inpo(top, bot, weight) + 1.0) / 2.0;

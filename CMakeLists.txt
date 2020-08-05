@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15) # cmake 3.15 (don't change)
+cmake_minimum_required(VERSION 3.7.2) # cmake 3.7.2 (don't change)
 project(cliAnimation)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -8,7 +8,7 @@ SET(CMAKE_CXX_FLAGS "-O3 -Wall -pthread -fcheck-new -g ")
 SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ")
 SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ")
 
-link_libraries(-lncurses -lmenu -lpanel)
+link_libraries(-lncurses -lmenu)
 
 include_directories(include)
 
