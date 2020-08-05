@@ -8,10 +8,8 @@
 #define CLIANIMATION_GREASEMONKEY_H
 
 #include <model/noisedef.h>
+#include <model/framedef.h>
 #include <model/flavour/flavour.h>
-#include <model/flavour/perlinnoise.h>
-#include <model/flavour/voronoi.h>
-#include <model/flavour/cellular.h>
 
 #define MAX_INPUT_CHAR SYMBOL_VARIETY
 

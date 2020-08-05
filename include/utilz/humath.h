@@ -9,6 +9,81 @@
 
 #include <cmath>
 
+namespace humath {
+
+    typedef struct __v2f{
+        union{float x, r;};
+        union{float y, g;};
+        __v2f(__v2f const& v) : x(v.x), y(v.y){}
+        __v2f(float x, float y) : x(x), y(y){}
+    }v2f;
+
+    typedef struct __v3f{
+        union{float x, r;};
+        union{float y, g;};
+        union{float z, b;};
+        __v3f(__v3f const& v) : x(v.x), y(v.y), z(v.z){}
+        __v3f(float x, float y, float z) : x(x), y(y), z(z){}
+    }v3f;
+
+    typedef struct __v4f{
+        union{float x, r;};
+        union{float y, g;};
+        union{float z, b;};
+        union{float w, a;};
+        __v4f(__v4f const& v) : x(v.x), y(v.y), z(v.z), w(v.w){}
+        __v4f(float x, float y, float z, float w) : x(x), y(y), z(z), w(w){}
+    }v4f;
+
+    typedef struct __mat3f{
+        v3f values[3];
+        __mat3f(__mat3f const& m)
+                : values{
+                v3f(m.values[0]),
+                v3f(m.values[1]),
+                v3f(m.values[2])
+        } {}
+        __mat3f(float s)
+                : values{
+                v3f(s, .0, .0),
+                v3f(.0, s, .0),
+                v3f(.0, .0, s)
+        } {}
+        __mat3f()
+                : values{
+                v3f(1.0, .0, .0),
+                v3f(.0, 1.0, .0),
+                v3f(.0, .0, 1.0)
+        } {}
+    }mat3f;
+
+    typedef struct __mat4f{
+        v4f values[4];
+        __mat4f(__mat4f const& m)
+        : values{
+            v4f(m.values[0]),
+            v4f(m.values[1]),
+            v4f(m.values[2]),
+            v4f(m.values[3])
+        } {}
+        __mat4f(float s)
+        : values{
+            v4f(s, .0, .0, .0),
+            v4f(.0, s, .0, .0),
+            v4f(.0, .0, s, .0),
+            v4f(.0, .0, .0, s)
+        } {}
+        __mat4f()
+                : values{
+                v4f(1.0, .0, .0, .0),
+                v4f(.0, 1.0, .0, .0),
+                v4f(.0, .0, 1.0, .0),
+                v4f(.0, .0, .0, 1.0)
+        } {}
+    }mat4f;
+
+}; // end of namespace humath
+
 #define linear_inpo(a0, a1, w) ((a0) + (w)*((a1) - (a0)))
 
 inline double cosine_interpolate(double a, double b, double x) {

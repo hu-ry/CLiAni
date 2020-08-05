@@ -40,4 +40,16 @@ enum e_NoiseAttribute{
     ATTRIBUTE_GENERIC
 };
 
+enum e_Scene{
+    SCENE_TYPE_1 = 0,
+    SCENE_CUBE,
+    SCENE_TYPE_2
+};
+
+enum e_SceneEffect{
+    EFFECT_NONE = 0,
+    EFFECT_INVERTED,
+    EFFECT_TYPE_1
+};
+
 #endif //CLIANIMATION_GLOBAL_H

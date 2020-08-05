@@ -8,6 +8,10 @@
 #include <model/greasemonkey.h>
 #include <utilz/global.h>
 
+#include <model/flavour/perlinnoise.h>
+#include <model/flavour/voronoi.h>
+#include <model/flavour/cellular.h>
+
 namespace CliAniHury {
 
     GreaseMonkey::GreaseMonkey() {
