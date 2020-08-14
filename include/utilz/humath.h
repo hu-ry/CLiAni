@@ -15,6 +15,31 @@ namespace humath {
     typedef struct v2f{
         union{float x, r;};
         union{float y, g;};
+        // Component Access
+        typedef int length_t;
+        static constexpr length_t length(){return 2;}
+        constexpr float & operator[](length_t i) {
+            assert(i >= 0 && i < this->length());
+            switch(i)
+            {
+                default:
+                case 0:
+                    return x;
+                case 1:
+                    return y;
+            }
+        }
+        constexpr float const& operator[](length_t i) const {
+            assert(i >= 0 && i < this->length());
+            switch(i)
+            {
+                default:
+                case 0:
+                    return x;
+                case 1:
+                    return y;
+            }
+        }
         // Implicit basic constructors
         inline constexpr v2f(v2f const& v) : x(v.x), y(v.y){}
         // Explicit basic constructors
