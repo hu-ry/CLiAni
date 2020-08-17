@@ -8,6 +8,7 @@
 #define CLIANIMATION_HUMATH_H
 
 #include <cmath>
+#include <limits>
 #include <cassert>
 
 namespace humath {
@@ -259,29 +260,25 @@ namespace humath {
                 : values{a, b, c} {}
         // Unary arithmetic operators
         inline constexpr mat3f& operator=(mat3f const& v) = default;
-        inline constexpr mat3f& operator+=(float scalar)
-        {
+        inline constexpr mat3f& operator+=(float scalar) {
             this->values[0] += scalar;
             this->values[1] += scalar;
             this->values[2] += scalar;
             return *this;
         }
-        inline constexpr mat3f& operator+=(mat3f const& m)
-        {
+        inline constexpr mat3f& operator+=(mat3f const& m) {
             this->values[0] += m[0];
             this->values[1] += m[1];
             this->values[2] += m[2];
             return *this;
         }
-        inline constexpr mat3f& operator-=(float scalar)
-        {
+        inline constexpr mat3f& operator-=(float scalar) {
             this->values[0] -= scalar;
             this->values[1] -= scalar;
             this->values[2] -= scalar;
             return *this;
         }
-        inline constexpr mat3f& operator-=(mat3f const& m)
-        {
+        inline constexpr mat3f& operator-=(mat3f const& m) {
             this->values[0] -= m[0];
             this->values[1] -= m[1];
             this->values[2] -= m[2];
@@ -333,32 +330,28 @@ namespace humath {
         : values{a, b, c, d} {}
         // Unary arithmetic operators
         inline constexpr mat4f& operator=(mat4f const& v) = default;
-        inline constexpr mat4f& operator+=(float scalar)
-        {
+        inline constexpr mat4f& operator+=(float scalar) {
             this->values[0] += scalar;
             this->values[1] += scalar;
             this->values[2] += scalar;
             this->values[3] += scalar;
             return *this;
         }
-        inline constexpr mat4f& operator+=(mat4f const& m)
-        {
+        inline constexpr mat4f& operator+=(mat4f const& m) {
             this->values[0] += m[0];
             this->values[1] += m[1];
             this->values[2] += m[2];
             this->values[3] += m[3];
             return *this;
         }
-        inline constexpr mat4f& operator-=(float scalar)
-        {
+        inline constexpr mat4f& operator-=(float scalar) {
             this->values[0] -= scalar;
             this->values[1] -= scalar;
             this->values[2] -= scalar;
             this->values[3] -= scalar;
             return *this;
         }
-        inline constexpr mat4f& operator-=(mat4f const& m)
-        {
+        inline constexpr mat4f& operator-=(mat4f const& m) {
             this->values[0] -= m[0];
             this->values[1] -= m[1];
             this->values[2] -= m[2];
@@ -366,6 +359,21 @@ namespace humath {
             return *this;
         }
     }mat4f;
+
+    /// Creates a matrix for a right handed, symetric perspective-view frustum.
+    mat4f perspective(float fovy, float aspect, float zNear, float zFar) {
+        assert(abs(aspect - std::numeric_limits<float>::epsilon()) > 0.0f);
+
+        float const tanHalfFovy = tanf(fovy / 2.0f);
+
+        mat4f Result(0.0f);
+        Result[0][0] = 1.0f / (aspect * tanHalfFovy);
+        Result[1][1] = 1.0f / tanHalfFovy;
+        Result[2][2] = - (zFar + zNear) / (zFar - zNear);
+        Result[2][3] = - 1.0f;
+        Result[3][2] = - (2.0f * zFar * zNear) / (zFar - zNear);
+        return Result;
+    }
 
 }; // end of namespace humath
 
