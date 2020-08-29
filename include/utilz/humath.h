@@ -513,7 +513,7 @@ namespace humath {
     }mat4f;
 
     /// Creates a matrix for a right handed, symetric perspective-view frustum.
-    mat4f perspective(float fovy, float aspect, float zNear, float zFar) {
+    inline mat4f perspective(float fovy, float aspect, float zNear, float zFar) {
         assert(abs(aspect - std::numeric_limits<float>::epsilon()) > 0.0f);
 
         float const tanHalfFovy = tanf(fovy / 2.0f);
