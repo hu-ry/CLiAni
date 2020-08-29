@@ -21,8 +21,7 @@ namespace humath {
         static constexpr length_t length(){return 2;}
         constexpr float & operator[](length_t i) {
             assert(i >= 0 && i < this->length());
-            switch(i)
-            {
+            switch(i) {
                 default:
                 case 0:
                     return x;
@@ -32,8 +31,7 @@ namespace humath {
         }
         constexpr float const& operator[](length_t i) const {
             assert(i >= 0 && i < this->length());
-            switch(i)
-            {
+            switch(i) {
                 default:
                 case 0:
                     return x;
@@ -59,8 +57,7 @@ namespace humath {
         static constexpr length_t length(){return 3;}
         constexpr float & operator[](length_t i) {
             assert(i >= 0 && i < this->length());
-            switch(i)
-            {
+            switch(i) {
                 default:
                 case 0:
                     return x;
@@ -72,8 +69,7 @@ namespace humath {
         }
         constexpr float const& operator[](length_t i) const {
             assert(i >= 0 && i < this->length());
-            switch(i)
-            {
+            switch(i) {
                 default:
                 case 0:
                     return x;
@@ -114,6 +110,30 @@ namespace humath {
             this->z -= v.z;
             return *this;
         }
+        inline constexpr v3f& operator*=(float scalar) {
+            this->x *= scalar;
+            this->y *= scalar;
+            this->z *= scalar;
+            return *this;
+        }
+        inline constexpr v3f& operator*=(v3f const& v) {
+            this->x *= v.x;
+            this->y *= v.y;
+            this->z *= v.z;
+            return *this;
+        }
+        inline constexpr v3f& operator/=(float v) {
+            this->x /= v;
+            this->y /= v;
+            this->z /= v;
+            return *this;
+        }
+        inline constexpr v3f& operator/=(v3f const& v) {
+            this->x /= v.x;
+            this->y /= v.y;
+            this->z /= v.z;
+            return *this;
+        }
         // Increment and decrement operators
         inline constexpr v3f& operator++() {
             ++this->x;
@@ -126,6 +146,91 @@ namespace humath {
             --this->y;
             --this->z;
             return *this;
+        }
+        // Unary arithmetic operators --
+        friend inline constexpr v3f operator+(v3f const& v) {
+            return v;
+        }
+        friend inline constexpr v3f operator-(v3f const& v) {
+            return v3f(
+                    -v.x,
+                    -v.y,
+                    -v.z);
+        }
+        // Binary arithmetic operators
+        friend inline constexpr v3f operator+(v3f const& v, float scalar) {
+            return v3f(
+                    v.x + scalar,
+                    v.y + scalar,
+                    v.z + scalar);
+        }
+        friend inline constexpr v3f operator+(float scalar, v3f const& v) {
+            return v3f(
+                    scalar + v.x,
+                    scalar + v.y,
+                    scalar + v.z);
+        }
+        friend inline constexpr v3f operator+(v3f const& v1, v3f const& v2)
+        {
+            return v3f(
+                    v1.x + v2.x,
+                    v1.y + v2.y,
+                    v1.z + v2.z);
+        }
+        friend inline constexpr v3f operator-(v3f const& v, float scalar) {
+            return v3f(
+                    v.x - scalar,
+                    v.y - scalar,
+                    v.z - scalar);
+        }
+        friend inline constexpr v3f operator-(float scalar, v3f const& v) {
+            return v3f(
+                    scalar - v.x,
+                    scalar - v.y,
+                    scalar - v.z);
+        }
+        friend inline constexpr v3f operator-(v3f const& v1, v3f const& v2)
+        {
+            return v3f(
+                    v1.x - v2.x,
+                    v1.y - v2.y,
+                    v1.z - v2.z);
+        }
+        friend inline constexpr v3f operator*(v3f const& v, float scalar) {
+            return v3f(
+                    v.x * scalar,
+                    v.y * scalar,
+                    v.z * scalar);
+        }
+        friend inline constexpr v3f operator*(float scalar, v3f const& v) {
+            return v3f(
+                    scalar * v.x,
+                    scalar * v.y,
+                    scalar * v.z);
+        }
+        friend inline constexpr v3f operator*(v3f const& v1, v3f const& v2) {
+            return v3f(
+                    v1.x * v2.x,
+                    v1.y * v2.y,
+                    v1.z * v2.z);
+        }
+        friend inline constexpr v3f operator/(v3f const& v, float scalar) {
+            return v3f(
+                    v.x / scalar,
+                    v.y / scalar,
+                    v.z / scalar);
+        }
+        friend inline constexpr v3f operator/(float scalar, v3f const& v) {
+            return v3f(
+                    scalar / v.x,
+                    scalar / v.y,
+                    scalar / v.z);
+        }
+        friend inline constexpr v3f operator/(v3f const& v1, v3f const& v2) {
+            return v3f(
+                    v1.x / v2.x,
+                    v1.y / v2.y,
+                    v1.z / v2.z);
         }
     }v3f;
 
@@ -283,6 +388,53 @@ namespace humath {
             this->values[1] -= m[1];
             this->values[2] -= m[2];
             return *this;
+        }
+        // Unary arithmetic operators
+        friend inline constexpr mat3f operator+(mat3f const& m) {
+            return m;
+        }
+        friend inline constexpr mat3f operator-(mat3f const& m) {
+            return mat3f(
+                    -m[0],
+                    -m[1],
+                    -m[2]);
+        }
+        // Binary arithmetic operators
+        friend inline constexpr mat3f operator+(mat3f const& m, float scalar) {
+            return mat3f(
+                    m[0] + scalar,
+                    m[1] + scalar,
+                    m[2] + scalar);
+        }
+        friend inline constexpr mat3f operator+(float scalar, mat3f const& m) {
+            return mat3f(
+                    m[0] + scalar,
+                    m[1] + scalar,
+                    m[2] + scalar);
+        }
+        friend inline constexpr mat3f operator+(mat3f const& m1, mat3f const& m2) {
+            return mat3f(
+                    m1[0] + m2[0],
+                    m1[1] + m2[1],
+                    m1[2] + m2[2]);
+        }
+        friend inline constexpr mat3f operator-(mat3f const& m, float scalar) {
+            return mat3f(
+                    m[0] - scalar,
+                    m[1] - scalar,
+                    m[2] - scalar);
+        }
+        friend inline constexpr mat3f operator-(float scalar, mat3f const& m) {
+            return mat3f(
+                    scalar - m[0],
+                    scalar - m[1],
+                    scalar - m[2]);
+        }
+        friend inline constexpr mat3f operator-(mat3f const& m1, mat3f const& m2) {
+            return mat3f(
+                    m1[0] - m2[0],
+                    m1[1] - m2[1],
+                    m1[2] - m2[2]);
         }
     }mat3f;
 
