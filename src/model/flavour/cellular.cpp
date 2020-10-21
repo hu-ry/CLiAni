@@ -13,7 +13,7 @@
 namespace tasty {
 
     // Hardcoded values for different shades
-    float shades[10] = {0.09, 0.19, 0.29, 0.37,
+    const double shades[10] = {0.09, 0.19, 0.29, 0.37,
     0.46, 0.55, 0.63, 0.7, 0.82, 9.0};
 
     double Cellular::generateNoise(int x, int y) {
@@ -30,7 +30,7 @@ namespace tasty {
 
         int maxTileX, maxTileY, tileX, tileY;
 
-        // For checking bounds
+        // SANITY CHECK for checking bounds
         tileX = (bottomLeft_X / VORONOI_GRID_SCALE) - (bottomLeft_X != 0);
         tileY = (bottomLeft_Y / VORONOI_GRID_SCALE) - 1;
 
@@ -59,7 +59,7 @@ namespace tasty {
                         minDist = dist;
                         // Saving Closest Point
                         int temp;
-                        if(index < 0) {
+                        if(index < 0) { // Calc index of current closet point
                             temp = (VORONOI_SQUARE_AMOUNT+index)%VORONOI_SQUARE_AMOUNT;
                         } else {
                             temp = index%VORONOI_SQUARE_AMOUNT;
@@ -71,21 +71,27 @@ namespace tasty {
             }
         }
 
-        float temp =    (minGrid.x/VORONOI_SQUARE_AMOUNT)+(minGrid.y*2)
-                        + roundf(minPoint.y/VORONOI_GRID_SCALE);
-        int shade_index = (int)roundf((temp/5)*10);
+        //float temp =    (minGrid.x/VORONOI_SQUARE_AMOUNT)+(minGrid.y*2)
+        //                + roundf(minPoint.y/VORONOI_GRID_SCALE);
+        //int shade_index = (int)roundf((temp/5)*10);
+        //
+        //double result = shades[shade_index];
 
-        double result = shades[shade_index];
+        // New shade picking formula!
+        int subx = 0, suby = 0;
+        for(int i = 0; i < _Grid.at(minGrid.x).fp_amount; i++) {
+            subx += (minPoint.x <= _Grid.at(minGrid.x).f_points[i].x);
+            suby += (minPoint.y <= _Grid.at(minGrid.x).f_points[i].y);
+        }
+        subx = (_Grid.at(minGrid.x).fp_amount == subx
+                && _Grid.at(minGrid.x).fp_amount != 1);
+        suby = (_Grid.at(minGrid.x).fp_amount == suby
+                && _Grid.at(minGrid.x).fp_amount != 1);
 
+        int shade_index = //(((int)minGrid.y%3 == 0 && suby)*-1) +
+                ((int)minGrid.x+(subx*3)+(suby*9)) % 10;
 
-        // (minPoint.x / VORONOI_GRID_SCALE + minPoint.y / VORONOI_GRID_SCALE)/2;
-        // + (((minPoint.y / VORONOI_GRID_SCALE) * (minPoint.y / VORONOI_GRID_SCALE)) / 1.5);
-
-        // !!!Unused Code!!!
-        //glm::vec3 color = glm::mix( glm::vec3(1.0), glm::vec3(0.0), smoothstep( 0.03, 0.08, (float)result ) );
-        //result = 0.2126*color.x + 0.7152*color.y + 0.0722*color.z; // grayscale
-
-        return result; // WORKS NOW!
+        return shades[shade_index]; // WORKS NOW!
     }
 
 
