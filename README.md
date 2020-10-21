@@ -4,16 +4,22 @@ Clani is a commandline program for any Linux distro written in C/C++, which can 
 The purpose of this project is not well defined and just something I work on by the side for fun.
 
 ### Make Your Choice!
-![The Clani Menu gives you the choice to pick!](doc/clani_rain_menu.gif)
+
 You can choose from different flavours and apply a variety of effects on them.
 
+![The Clani Menu gives you the choice to pick!](doc/clani_rain_menu.gif)
+
 ### Scrolling Cellular Voronoi Pattern
-![Scrolling Cellular Voronoi Pattern](doc/Cellular_Voronoi.gif)
+
 An endless scrolling cellular Voronoi pattern for example!  
 
+![Scrolling Cellular Voronoi Pattern](doc/Cellular_Voronoi.gif)
+
 ### ZigZag Simple Voronoi Pattern
-![ZigZag Simple Voronoi Pattern](doc/Zigzag_Simple_Voronoi.gif)
+
 Or how about this simple, but eyecatching zigzag effect you can apply onto every pattern.
+
+![ZigZag Simple Voronoi Pattern](doc/Zigzag_Simple_Voronoi.gif)
 
 ## **Setup**
 Here I'm providing a little explanation on how to get clani running on your system:
