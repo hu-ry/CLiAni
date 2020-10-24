@@ -40,6 +40,7 @@ namespace humath {
             }
         }
         // Implicit basic constructors
+        inline constexpr v2f() : x(.0), y(.0){}
         inline constexpr v2f(v2f const& v) : x(v.x), y(v.y){}
         // Explicit basic constructors
         inline constexpr explicit v2f(float scalar) : x(scalar), y(scalar){}
@@ -47,6 +48,42 @@ namespace humath {
 
         inline constexpr v2f& operator=(v2f const& v) = default;
     }v2f;
+
+    typedef struct v2i{
+        union{int x, r;};
+        union{int y, g;};
+        // Component Access
+        typedef int length_t;
+        static constexpr length_t length(){return 2;}
+        constexpr int & operator[](length_t i) {
+            assert(i >= 0 && i < this->length());
+            switch(i) {
+                default:
+                case 0:
+                    return x;
+                case 1:
+                    return y;
+            }
+        }
+        constexpr int const& operator[](length_t i) const {
+            assert(i >= 0 && i < this->length());
+            switch(i) {
+                default:
+                case 0:
+                    return x;
+                case 1:
+                    return y;
+            }
+        }
+        // Implicit basic constructors
+        inline constexpr v2i() : x(0), y(0){}
+        inline constexpr v2i(v2i const& v) : x(v.x), y(v.y){}
+        // Explicit basic constructors
+        inline constexpr explicit v2i(int scalar) : x(scalar), y(scalar){}
+        inline constexpr v2i(int x, int y) : x(x), y(y){}
+
+        inline constexpr v2i& operator=(v2i const& v) = default;
+    }v2i;
 
     typedef struct v3f{
         union{float x, r;};
@@ -80,6 +117,7 @@ namespace humath {
             }
         }
         // Implicit basic constructors
+        inline constexpr v3f() : x(.0), y(.0), z(.0){}
         inline constexpr v3f(v3f const& v) : x(v.x), y(v.y), z(v.z){}
         // Explicit basic constructors
         inline constexpr explicit v3f(float scalar) : x(scalar), y(scalar), z(scalar){}
@@ -273,6 +311,7 @@ namespace humath {
             }
         }
         // Implicit basic constructors
+        inline constexpr v4f() : x(.0), y(.0), z(.0), w(.0){}
         inline constexpr v4f(v4f const& v) : x(v.x), y(v.y), z(v.z), w(v.w){}
         // Explicit basic constructors
         inline constexpr explicit v4f(float scalar) : x(scalar), y(scalar), z(scalar), w(scalar){}

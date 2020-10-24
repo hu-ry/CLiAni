@@ -89,7 +89,7 @@ namespace tasty {
                 && _Grid.at(minGrid.x).fp_amount != 1);
 
         int shade_index = //(((int)minGrid.y%3 == 0 && suby)*-1) +
-                ((int)minGrid.x+(subx*3)+(suby*9)) % 10;
+                ((int)minGrid.x+(subx*3)+(suby*8)) % 10;
 
         return shades[shade_index]; // WORKS NOW!
     }
