@@ -10,7 +10,7 @@
 #include <stdexcept>
 #include <memory>
 #include <utilz/global.h>
-#include <model/flavour/flavour.h>
+#include <flavour/flavour.h>
 
 #define CHAR_AMOUNT_PER_LINE WINDOW_LINE_WIDTH
 #define CHAR_REPEAT_HEIGHT 256

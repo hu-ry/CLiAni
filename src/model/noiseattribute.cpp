@@ -4,7 +4,7 @@
 //## Author: Ryan Huth(hury) ############################# License: GNU GPLv3 ##
 //##############################################################################
 
-#include <model/noisedef.h>
+#include <noisedef.h>
 #include <cmath>
 
 namespace tasty {

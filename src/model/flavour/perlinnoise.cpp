@@ -5,7 +5,7 @@
 //##############################################################################
 
 
-#include <model/flavour/perlinnoise.h>
+#include <flavour/perlinnoise.h>
 #include <utilz/humath.h>
 #include <cstdlib>
 

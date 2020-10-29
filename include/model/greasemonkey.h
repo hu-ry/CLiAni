@@ -7,9 +7,9 @@
 #ifndef CLIANIMATION_GREASEMONKEY_H
 #define CLIANIMATION_GREASEMONKEY_H
 
-#include <model/noisedef.h>
-#include <model/framedef.h>
-#include <model/flavour/flavour.h>
+#include <noisedef.h>
+#include <framedef.h>
+#include <flavour/flavour.h>
 
 #define MAX_INPUT_CHAR SYMBOL_VARIETY
 

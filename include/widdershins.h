@@ -7,7 +7,7 @@
 #ifndef CLIANIMATION_WIDDERSHINS_H
 #define CLIANIMATION_WIDDERSHINS_H
 
-#include "cliview.h"
+#include "view/cliview.h"
 #include "model/greasemonkey.h"
 
 namespace CliAniHury {

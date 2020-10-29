@@ -5,7 +5,7 @@
 //##############################################################################
 
 
-#include <model/greasemonkey.h>
+#include <greasemonkey.h>
 #include <utilz/global.h>
 
 #include <model/flavour/perlinnoise.h>

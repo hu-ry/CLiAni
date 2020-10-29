@@ -5,7 +5,7 @@
 //##############################################################################
 
 
-#include <model/flavour/flavour.h>
+#include <flavour/flavour.h>
 
 namespace tasty {
 

@@ -5,7 +5,7 @@
 //##############################################################################
 
 
-#include <model/flavour/voronoi.h>
+#include <flavour/voronoi.h>
 #include <utilz/humath.h>
 #include <cstdlib>
 

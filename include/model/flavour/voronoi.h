@@ -7,7 +7,7 @@
 #ifndef CLIANIMATION_VORONOI_H
 #define CLIANIMATION_VORONOI_H
 
-#include <model/flavour/flavour.h>
+#include <flavour/flavour.h>
 #include <utilz/cyclicptr.h>
 #include <glm/vec2.hpp>
 
