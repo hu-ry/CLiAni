@@ -8,8 +8,8 @@
 #include <cstdlib>
 #include <cstring>
 
-#include <cocktailmenu.h>
-#include <cliview.h>
+#include <view/cocktailmenu.h>
+#include <view/cliview.h>
 
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))

@@ -6,7 +6,7 @@
 
 #include <glm/geometric.hpp>
 
-#include <model/flavour/cellular.h>
+#include <flavour/cellular.h>
 #include <utilz/humath.h>
 
 

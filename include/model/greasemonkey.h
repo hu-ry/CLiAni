@@ -7,11 +7,11 @@
 #ifndef CLIANIMATION_GREASEMONKEY_H
 #define CLIANIMATION_GREASEMONKEY_H
 
-#include <model/noisedef.h>
-#include <model/flavour/flavour.h>
-#include <model/flavour/perlinnoise.h>
-#include <model/flavour/voronoi.h>
-#include <model/flavour/cellular.h>
+#include <noisedef.h>
+#include <flavour/flavour.h>
+#include <flavour/perlinnoise.h>
+#include <flavour/voronoi.h>
+#include <flavour/cellular.h>
 
 #define MAX_INPUT_CHAR SYMBOL_VARIETY
 
