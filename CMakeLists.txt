@@ -49,7 +49,7 @@ SET(clanimain src/main.cpp)
 find_package(Boost 1.72 COMPONENTS unit_test_framework REQUIRED)
 
 ## Ncurses
-find_library(ncurses REQUIRED)
+find_library(ncurses COMPONENTS menu REQUIRED)
 
 # Finalize Targets
 
