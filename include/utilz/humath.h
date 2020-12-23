@@ -47,6 +47,55 @@ namespace humath {
         inline constexpr v2f(float x, float y) : x(x), y(y){}
 
         inline constexpr v2f& operator=(v2f const& v) = default;
+
+        // Binary arithmetic operators
+        friend inline constexpr v2f operator+(v2f const& v, float scalar) {
+            return v2f(
+                    v.x + scalar,
+                    v.y + scalar);
+        }
+        friend inline constexpr v2f operator+(float scalar, v2f const& v) {
+            return v2f(
+                    scalar + v.x,
+                    scalar + v.y);
+        }
+        friend inline constexpr v2f operator+(v2f const& v1, v2f const& v2)
+        {
+            return v2f(
+                    v1.x + v2.x,
+                    v1.y + v2.y);
+        }
+        friend inline constexpr v2f operator-(v2f const& v, float scalar) {
+            return v2f(
+                    v.x - scalar,
+                    v.y - scalar);
+        }
+        friend inline constexpr v2f operator-(float scalar, v2f const& v) {
+            return v2f(
+                    scalar - v.x,
+                    scalar - v.y);
+        }
+        friend inline constexpr v2f operator-(v2f const& v1, v2f const& v2)
+        {
+            return v2f(
+                    v1.x - v2.x,
+                    v1.y - v2.y);
+        }
+        friend inline constexpr v2f operator*(v2f const& v, float scalar) {
+            return v2f(
+                    v.x * scalar,
+                    v.y * scalar);
+        }
+        friend inline constexpr v2f operator*(float scalar, v2f const& v) {
+            return v2f(
+                    scalar * v.x,
+                    scalar * v.y);
+        }
+        friend inline constexpr v2f operator*(v2f const& v1, v2f const& v2) {
+            return v2f(
+                    v1.x * v2.x,
+                    v1.y * v2.y);
+        }
     }v2f;
 
     typedef struct v2i{
@@ -83,6 +132,11 @@ namespace humath {
         inline constexpr v2i(int x, int y) : x(x), y(y){}
 
         inline constexpr v2i& operator=(v2i const& v) = default;
+        inline constexpr v2i& operator=(v2f const& v) {
+            this->x = static_cast<int>(v.x);
+            this->y = static_cast<int>(v.y);
+            return *this;
+        };
     }v2i;
 
     typedef struct v3f{
@@ -550,6 +604,19 @@ namespace humath {
             return *this;
         }
     }mat4f;
+
+    inline constexpr float min(float x, float y) {
+        return (y < x) ? y : x;
+    }
+
+    inline constexpr float dot(v2f const& x, v2f const& y) {
+        v2f tmp(x * y);
+        return tmp.x + tmp.y;
+    }
+
+    inline v2f normalize(v2f const& v) {
+        return v * (1 / std::sqrt(dot(v, v)));
+    }
 
     /// Creates a matrix for a right handed, symetric perspective-view frustum.
     inline mat4f perspective(float fovy, float aspect, float zNear, float zFar) {

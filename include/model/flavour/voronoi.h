@@ -9,7 +9,7 @@
 
 #include <flavour/flavour.h>
 #include <utilz/cyclicptr.h>
-#include <glm/vec2.hpp>
+#include <utilz/humath.h>
 
 #define VORONOI_GRID_SCALE 32
 #define VORONOI_WIDTH 128

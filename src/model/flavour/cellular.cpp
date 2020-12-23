@@ -4,8 +4,6 @@
 //## Author: Ryan Huth(hury) ############################# License: GNU GPLv3 ##
 //##############################################################################
 
-#include <glm/geometric.hpp>
-
 #include <flavour/cellular.h>
 #include <utilz/humath.h>
 
@@ -25,8 +23,8 @@ namespace tasty {
 
 
         double minDist = VORONOI_GRID_SCALE;
-        glm::vec2 minGrid = glm::vec2(1, 1);
-        glm::vec2 minPoint = glm::vec2(1, 1);
+        humath::v2i minGrid = humath::v2i(1, 1);
+        humath::v2i minPoint = humath::v2i(1, 1);
 
         int maxTileX, maxTileY, tileX, tileY;
 
@@ -44,14 +42,14 @@ namespace tasty {
 
                 int index = xi + (VORONOI_GRID_WIDTH * yi);
                 for (int i = 0; i < _Grid.at(index).fp_amount; i++) {
-                    glm::vec2 rad;
-                    glm::vec2 point;
+                    humath::v2f rad;
+                    humath::v2f point;
                     point.x = _Grid.at(index).f_points[i].x;
                     point.y = _Grid.at(index).f_points[i].y;
                     rad.x = point.x + xi*VORONOI_GRID_SCALE - (float)x;
                     rad.y = fabsf(point.y + yi*VORONOI_GRID_SCALE) - y;
 
-                    double dist = sqrt(glm::dot(rad, rad));
+                    double dist = sqrt_aprox(humath::dot(rad, rad));
                     //double dist = glm::dot(rad, rad);
 
                     if (dist < minDist) {
@@ -64,7 +62,7 @@ namespace tasty {
                         } else {
                             temp = index%VORONOI_SQUARE_AMOUNT;
                         }
-                        minGrid = glm::vec2(temp, i);
+                        minGrid = humath::v2i(temp, i);
                         minPoint = point;
                     }
                 }
@@ -96,36 +94,36 @@ namespace tasty {
 
 
     void Cellular::voronoi_pass(int xLocal, int yLocal, int xi, int yi,
-                                double& minDist, glm::vec2& minGrid, glm::vec2& minRad) {
+                                double& minDist, humath::v2f& minGrid, humath::v2f& minRad) {
 
         int index = xi + (VORONOI_GRID_WIDTH * yi);
         for (int i = 0; i < _Grid.at(index).fp_amount; i++) {
-            glm::vec2 rad;
+            humath::v2f rad;
             rad.x = _Grid.at(index).f_points[i].x + _Grid.at(index).bot_left.x - xLocal;
             rad.y = _Grid.at(index).f_points[i].y + yi*VORONOI_GRID_SCALE - yLocal;
 
-            double dist = glm::dot(rad, rad);
+            double dist = humath::dot(rad, rad);
 
             if (dist < minDist) {
                 minRad = rad;
-                minGrid = glm::vec2(xi, yi);
+                minGrid = humath::v2f(xi, yi);
                 minDist = dist;
             }
         }
     }
 
     double Cellular::distance_pass(int xLocal, int yLocal, int xi, int yi,
-                                   double minDist, glm::vec2& minGrid, glm::vec2& minRad) {
+                                   double minDist, humath::v2f& minGrid, humath::v2f& minRad) {
 
         int index = xi + (VORONOI_GRID_WIDTH * yi);
         for (int i = 0; i < _Grid.at(index).fp_amount; i++) {
-            glm::vec2 rad;
+            humath::v2f rad;
             rad.x = _Grid.at(index).f_points[i].x + _Grid.at(index).bot_left.x - xLocal;
             rad.y = _Grid.at(index).f_points[i].y + yi*VORONOI_GRID_SCALE - yLocal;
 
 
-            if ( glm::dot(minRad-rad, minRad-rad)>1.00f) {
-                minDist = glm::min((float)minDist, glm::dot( 0.5f*(minRad+rad), glm::normalize(rad-minRad) ));
+            if ( humath::dot(minRad-rad, minRad-rad)>1.00f) {
+                minDist = humath::min((float)minDist, humath::dot( 0.5f*(minRad+rad), humath::normalize(rad-minRad) ));
             }
         }
         return minDist;
