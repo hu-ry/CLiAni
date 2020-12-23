@@ -71,7 +71,7 @@ namespace tasty {
     void Voronoi::generate_fpoints(SquareEntity* grid) {
         for (int i = 0; i < _SquareAmount; i++) {
             grid[i].fp_amount =
-                    _ProbabilityAmount[rand() % VORONOI_FP_PROBABILITIES];
+                    _ProbabilityAmount[i % VORONOI_FP_PROBABILITIES];
             for (auto &f_point : grid[i].f_points) {
                 f_point.x =
                         fabs(cos((double) (rand() % 250))) * VORONOI_GRID_SCALE;

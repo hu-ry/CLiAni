@@ -33,7 +33,7 @@ namespace tasty {
          * @param minRad : minimum radius
          */
         void voronoi_pass(int xLocal, int yLocal, int xi, int yi,
-                double& minDist, glm::vec2& minGrid, glm::vec2& minRad);
+                double& minDist, humath::v2f& minGrid, humath::v2f& minRad);
 
         /**
          *
@@ -49,7 +49,7 @@ namespace tasty {
          * @return the final distance
          */
         double distance_pass(int xLocal, int yLocal, int xi, int yi,
-                double minDist, glm::vec2& minGrid, glm::vec2& minRad);
+                double minDist, humath::v2f& minGrid, humath::v2f& minRad);
 
     };
 
