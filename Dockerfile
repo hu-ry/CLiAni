@@ -7,7 +7,7 @@ WORKDIR /usr/src/clani
 RUN echo 'Server = https://mirror.pkgbuild.com/$repo/os/$arch' > /etc/pacman.d/mirrorlist
 
 # Installing pkgs
-RUN pacman -Suy --noconfirm --needed base base-devel cmake ncurses glm boost
+RUN pacman -Suy --noconfirm --needed base base-devel cmake ncurses boost
 
 # Cleaning pacman cache
 RUN find /var/cache/pacman/ -type f -delete && cd /usr/src/clani
