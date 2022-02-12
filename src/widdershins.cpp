@@ -39,8 +39,12 @@ namespace CliAniHury {
 
         _Engine.setCharacters(_View->getVariety(), SYMBOL_VARIETY);
 
-        // Scrollmode run function pointer assigned
-        _RunFunc = scrollmode_run;
+        // Assigns wanted Scrollmode run function pointer in a branchless manner (really pls don't do this)
+        // And yes I hate branch coverage :)
+        _RunFunc = reinterpret_cast<opmode_run_func>(
+                (opmode == 1) * reinterpret_cast<uint64_t>(scrollmode_run) +
+                (opmode == 2) * reinterpret_cast<uint64_t>(framemode_run)
+                );
 
         // Preparing model and noise functions for operating
         _Engine.setup(opmode, _View->getSeed(), _View->getSelection());
@@ -54,7 +58,7 @@ namespace CliAniHury {
 
     void scrollmode_run(CliView &view, GreaseMonkey &engine) {
         // Prints the newest line of characters at the top
-        view.printAt(0, 0, engine.runIteration());
+        view.printAtNoRefresh(0, 0, engine.runIteration());
         // Waits for a specific amount of time
         view.waiting(100);
         // Removes the bottom most line on cli
@@ -62,8 +66,7 @@ namespace CliAniHury {
     }
 
     void framemode_run(CliView &view, GreaseMonkey &engine) {
-
-
+        view.printOverTopLeft(engine.runFrame());
         view.waiting(50);
     }
 

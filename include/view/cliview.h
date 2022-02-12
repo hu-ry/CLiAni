@@ -28,6 +28,8 @@ namespace CliAniHury {
 
         void removeBottomLine();
         void printAt(int x, int y, const char *printStr);
+        void printAtNoRefresh(int x, int y, const char *printStr);
+        void printOverTopLeft(const char *printStr);
         void requestCharacters(char *input, int n);
         int requestUserSeed(char *input, int n);
 

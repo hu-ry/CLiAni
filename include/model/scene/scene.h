@@ -20,38 +20,41 @@ namespace tasty {
     class Scene {
     public:
 
-        Scene(unsigned int t_height, unsigned int t_width) {
+        Scene(uint32_t t_height, uint32_t t_width) {
             _FrameSize = t_height*t_width;
-            _Height = t_height;
-            _Width = t_width;
+            _Dimension = {t_height, t_width};
             _Frame = new float[t_height*t_width];
         }
         virtual ~Scene() {
             delete[]_Frame;
         }
 
-        virtual float* calcFrame() {
+        virtual float *calcFrame() {
+            return nullptr;
+        }
+
+        virtual const char *transFrame() {
             return nullptr;
         }
 
     protected:
-        unsigned int _FrameSize = 0;
-        unsigned int _Height = 0;
-        unsigned int _Width = 0;
+        uint32_t _FrameSize = 0;
+        // tuple<Height, Width>
+        std::tuple<uint32_t, uint32_t> _Dimension{0, 0};
         float* _Frame = nullptr;
 
     };
 
     class SceneTwoD : Scene {
     public:
-        SceneTwoD(int t_height, int t_width) : Scene(t_height, t_width) {
+        SceneTwoD(uint32_t t_height, uint32_t t_width) : Scene(t_height, t_width) {
 
         }
     };
 
     class SceneThreeD : Scene {
     public:
-        SceneThreeD(int t_height, int t_width) : Scene(t_height, t_width) {
+        SceneThreeD(uint32_t t_height, uint32_t t_width) : Scene(t_height, t_width) {
 
         }
 

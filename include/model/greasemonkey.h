@@ -32,6 +32,8 @@ namespace CliAniHury {
         tasty::Flavour* _usedFlavour;
         tasty::CharIteration _currIteration = tasty::CharIteration(CHAR_AMOUNT_PER_LINE);
 
+        tasty::Scene* _currScene;
+
         std::string _inputChars;
         unsigned int _inputCharSize;
 

@@ -114,6 +114,20 @@ namespace CliAniHury {
         refresh();
     }
 
+    void CliView::printAtNoRefresh(int x, int y, const char *printStr) {
+        // Adds new line on top
+        move(0,0);
+        insertln();
+        // Prints String at specified position
+        mvprintw(y, x, printStr);
+    }
+
+    void CliView::printOverTopLeft(const char *printStr) {
+        move(0,0);
+        printw(printStr);
+        refresh();
+    }
+
     void CliView::requestCharacters(char *input, int n) {
         echo();
         printw(_defaultChars);

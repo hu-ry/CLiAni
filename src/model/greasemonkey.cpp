@@ -18,6 +18,7 @@ namespace CliAniHury {
         _inputCharSize = MAX_INPUT_CHAR;
         _inputChars.resize(_inputCharSize);
         _usedFlavour = new tasty::Flavour;
+        _currScene = nullptr;
     }
 
     GreaseMonkey::~GreaseMonkey() {
@@ -28,8 +29,11 @@ namespace CliAniHury {
 
         if(opm == 1) {
             initFlavour(taste.option_s.taste, taste.option_s.effect, seed);
+        } else if(opm == 2) {
+            initScene(taste.option_s.taste, taste.option_s.effect, seed);
         } else {
-
+            // illegal :)
+            exit(2);
         }
 
     }
@@ -40,7 +44,7 @@ namespace CliAniHury {
 
     const char* GreaseMonkey::runFrame() {
         // TODO: Give this something to output!
-        return nullptr;
+        return (*_currScene).transFrame();
     }
 
     void GreaseMonkey::setCharacters(const char *addChars, int amount) {
@@ -98,7 +102,8 @@ namespace CliAniHury {
     }
 
     void GreaseMonkey::initScene(int scene, int effect, int seed) {
-
+        //TODO: Implement pls ryan
+        exit(2);
     }
 
 }; // end of namespace CliAniHury
