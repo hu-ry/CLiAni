@@ -3,9 +3,6 @@ FROM archlinux
 # Set Working Directory
 WORKDIR /usr/src/clani
 
-# Faster mirror for build process
-RUN echo 'Server = https://mirror.pkgbuild.com/$repo/os/$arch' > /etc/pacman.d/mirrorlist
-
 # Installing pkgs
 RUN pacman -Suy --noconfirm --needed base base-devel cmake ncurses boost
 
