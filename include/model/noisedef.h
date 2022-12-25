@@ -133,5 +133,5 @@ namespace tasty {
         }
     };
 
-}; // end of namespace tasty
+} // end of namespace tasty
 #endif //CLIANIMATION_NOISEDEF_H
