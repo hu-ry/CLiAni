@@ -105,6 +105,10 @@ namespace CliAniHury {
         refresh();
     }
 
+    void CliView::updateTermSize(int ncols, int nrows) {
+        resizeterm(nrows, ncols);
+    }
+
     void CliView::printAt(int x, int y, const char *printStr) {
         // Adds new line on top
         move(0,0);
