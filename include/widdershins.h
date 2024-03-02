@@ -27,12 +27,14 @@ namespace CliAniHury {
 
         void start();
         void runFrame(int time);
+        void scheduleResize();
 
 
     private:
         CliView* _View;
         GreaseMonkey _Engine;
         opmode_run_func _RunFunc = nullptr;
+        bool resizeTriggered = false;
 
     };
 }; // end of namespace CliAniHury
