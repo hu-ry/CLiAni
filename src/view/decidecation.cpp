@@ -194,7 +194,6 @@ namespace CliAniHury {
 
         int exit = 0;
 
-
         if(_OperationMode == 1) {
             _ScrllOptionMenu = new DcdMenu(0, dcd_scrll_opt_choices, dcd_scrll_opt_default_selection, DCD_SCRLL_OPTION_AMOUNT);
             _ScrllOptionMenu->width = leftWidth;
@@ -431,7 +430,7 @@ namespace CliAniHury {
         while(stop < INPUT_SEED_MAXLENGTH && (input_char = getch())) {
             if('0' <= input_char && input_char <= '9') {
                 tempInput[stop] = (char)input_char;
-                mvwprintw(subWin, itemPosY, itemPosX+stop, "%s", &input_char);
+                mvwprintw(subWin, itemPosY, itemPosX+stop, "%s", (char*)&input_char);
                 stop++;
             }
 
@@ -440,7 +439,7 @@ namespace CliAniHury {
                 case KEY_ALT_BACKSPACE:
                 case '\b':
                     stop = stop - (stop > 0);
-                    mvwprintw(subWin, itemPosY, itemPosX+stop, "%s", &backspace);
+                    mvwprintw(subWin, itemPosY, itemPosX+stop, "%s", (char*)&backspace);
                     break;
                 case KEY_ENTER:
                 case '\n':
@@ -471,8 +470,8 @@ namespace CliAniHury {
     }
 
     void Decidecation::runVariationInput(DcdMenu *localMenu, WINDOW *subWin) {
-        int itemPosY = 4;
-        int itemPosX = 18;
+        const int itemPosY = 4;
+        const int itemPosX = 18;
 
         const char* emptyField = {"          "};
         int backspace = ' ';
@@ -484,7 +483,7 @@ namespace CliAniHury {
         while(stop < SYMBOL_VARIETY && (input_char = getch())) {
             if(' ' <= input_char && input_char <= '~') {
                 tempInput[stop] = (char)input_char;
-                mvwprintw(subWin, itemPosY, itemPosX+stop, "%s", &input_char);
+                mvwprintw(subWin, itemPosY, itemPosX+stop, "%s", (char*)&input_char);
                 stop++;
             }
 
@@ -493,7 +492,7 @@ namespace CliAniHury {
                 case KEY_ALT_BACKSPACE:
                 case '\b':
                     stop = stop - (stop > 0);
-                    mvwprintw(subWin, itemPosY, itemPosX+stop, "%s", &backspace);
+                    mvwprintw(subWin, itemPosY, itemPosX+stop, "%s", (char*)&backspace);
                     break;
                 case ERR:
                 case 0x1B: // Escape character
