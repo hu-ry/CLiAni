@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.7.2) # cmake 3.7.2 (don't change)
 project(cliAnimation)
 
-SET(CMAKE_CXX_STANDARD 14)
+SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 SET(CMAKE_CXX_FLAGS "-O0 -Wall -pthread -fcheck-new -g ")
 

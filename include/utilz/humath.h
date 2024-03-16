@@ -324,6 +324,13 @@ namespace humath {
                     v1.y / v2.y,
                     v1.z / v2.z);
         }
+        // Binary arithmetic member funciton operations
+        inline constexpr v3f& cross_product(v3f const& v) {
+            this->x = this->y * v.z - this->z * v.y;
+            this->y = this->z * v.x - this->x * v.z;
+            this->z = this->x * v.y - this->y * v.x;
+            return *this;
+        }
     }v3f;
 
     typedef struct v4f{
