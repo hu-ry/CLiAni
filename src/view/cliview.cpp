@@ -97,12 +97,16 @@ namespace CliAniHury {
 
     void CliView::removeBottomLine() {
         // Deletes the bottom line
-        move(WINDOW_LINE_HEIGHT,0);
+        move(LINES-1,0);
         deleteln();
         // moves curser to 0,0
         move(0,0);
         // Makes changes visible
         refresh();
+    }
+
+    void CliView::updateTermSize(int ncols, int nrows) {
+        resizeterm(nrows, ncols);
     }
 
     void CliView::printAt(int x, int y, const char *printStr) {

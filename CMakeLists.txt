@@ -49,7 +49,7 @@ SET(clanimain src/main.cpp)
 find_package(Boost 1.72 COMPONENTS unit_test_framework REQUIRED)
 
 ## Ncurses
-find_library(ncurses REQUIRED)
+find_library(ncurses 6.4 COMPONENTS menu REQUIRED)
 
 # Finalize Targets
 
@@ -135,7 +135,8 @@ foreach (testsrc ${utilz_tests})
     add_executable(${testName} ${testsrc}
             ${utilz_sources})
     target_link_libraries(${testName} ${Boost_LIBRARIES})
-            target_include_directories(${testName} PUBLIC
+    target_include_directories(${testName} PUBLIC
+            include
             include/utilz)
     set_target_properties(${testName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY
             ${CMAKE_CURRENT_BINARY_DIR}/bintest)

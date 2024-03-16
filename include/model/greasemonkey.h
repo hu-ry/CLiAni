@@ -44,6 +44,6 @@ namespace CliAniHury {
         void initScene(int scene, int effect, int seed);
     };
 
-}; // end of namespace CliAniHury
+} // end of namespace CliAniHury
 
 #endif //CLIANIMATION_GREASEMONKEY_H

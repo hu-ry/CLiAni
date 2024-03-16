@@ -4,7 +4,9 @@
 //## Author: Ryan Huth(hury) ############################# License: GNU GPLv3 ##
 //##############################################################################
 
-#define BOOST_TEST_MODULE UnitTest Greasemonkeytest
+#define BOOST_TEST_MODULE UnitTest GreasemonkeyTest
+#define BOOST_TEST_DYN_LINK
+
 #include <boost/test/unit_test.hpp>
 
 #include "greasemonkey.h"

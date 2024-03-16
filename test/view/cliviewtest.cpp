@@ -4,9 +4,11 @@
 //## Author: Ryan Huth(hury) ############################# License: GNU GPLv3 ##
 //##############################################################################
 
-#define BOOST_TEST_MODULE UnitTest Viewtest
+#define BOOST_TEST_MODULE UnitTest ViewTest
+#define BOOST_TEST_DYN_LINK
+
 #include <boost/test/unit_test.hpp>
-#include <ncurses.h>
+#include <curses.h>
 
 #include "cliview.h"
 

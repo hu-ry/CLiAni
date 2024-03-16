@@ -32,6 +32,7 @@ namespace CliAniHury {
         void printOverTopLeft(const char *printStr);
         void requestCharacters(char *input, int n);
         int requestUserSeed(char *input, int n);
+        void updateTermSize(int ncols, int nrows);
 
         /**
          * @deprecated UNUSED FUNCTION!

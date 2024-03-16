@@ -6,6 +6,7 @@
 
 #include <widdershins.h>
 #include <cstdio>
+#include <sys/ioctl.h>
 
 namespace CliAniHury {
 
@@ -50,7 +51,18 @@ namespace CliAniHury {
         _Engine.setup(opmode, _View->getSeed(), _View->getSelection());
     }
 
+    void performResize(CliView* view) {
+
+        struct winsize size;
+        if(ioctl(0, TIOCGWINSZ, (char *) &size) < 0)
+            ; // TODO: Handle error message or such
+        view->updateTermSize(size.ws_col, size.ws_row);
+    }
+
     void Widdershins::runFrame(int time) {
+
+        if (resizeTriggered)
+            performResize(_View);
 
         (*_RunFunc)(*_View, _Engine);
 
@@ -70,4 +82,8 @@ namespace CliAniHury {
         view.waiting(50);
     }
 
-}; // end of namespace CliAniHury
+    void Widdershins::scheduleResize() {
+        resizeTriggered = true;
+    }
+
+} // end of namespace CliAniHury
