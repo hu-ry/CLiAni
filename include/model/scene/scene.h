@@ -8,12 +8,17 @@
 #define CLIANIMATION_SCENE_H
 
 #include <utilz/humath.h>
+#include <cstdint>
+#include <tuple>
 
 namespace tasty {
 
     struct Camera{
         humath::v3f Position = humath::v3f(.0,.0,.0);
-        humath::v3f Target = humath::v3f(.0,.0,.0);
+        struct {
+            float yaw = 0.0;
+            float pitch = 0.0;
+        } Direction;
         float POV = 3.14159 / 5.0;
     };
 
@@ -21,12 +26,12 @@ namespace tasty {
     public:
 
         Scene(uint32_t t_height, uint32_t t_width) {
-            _FrameSize = t_height*t_width;
-            _Dimension = {t_height, t_width};
-            _Frame = new float[t_height*t_width];
+            m_FrameSize = t_height*t_width;
+            m_Dimension = {t_height, t_width};
+            m_Frame = new float[t_height*t_width];
         }
         virtual ~Scene() {
-            delete[]_Frame;
+            delete[]m_Frame;
         }
 
         virtual float *calcFrame() {
@@ -38,31 +43,34 @@ namespace tasty {
         }
 
     protected:
-        uint32_t _FrameSize = 0;
-        // tuple<Height, Width>
-        std::tuple<uint32_t, uint32_t> _Dimension{0, 0};
-        float* _Frame = nullptr;
+        uint32_t m_FrameSize = 0;
+        // Dimensions{Height, Width}
+        struct {
+            uint32_t height = 0;
+            uint32_t width = 0;
+        } m_Dimension;
+        float* m_Frame = nullptr;
 
     };
 
-    class SceneTwoD : Scene {
+    class Scene2D : Scene {
     public:
-        SceneTwoD(uint32_t t_height, uint32_t t_width) : Scene(t_height, t_width) {
+        Scene2D(uint32_t t_height, uint32_t t_width) : Scene(t_height, t_width) {
 
         }
     };
 
-    class SceneThreeD : Scene {
+    class Scene3D : Scene {
     public:
-        SceneThreeD(uint32_t t_height, uint32_t t_width) : Scene(t_height, t_width) {
+        Scene3D(uint32_t t_height, uint32_t t_width) : Scene(t_height, t_width) {
 
         }
 
     protected:
-        Camera _Camera;
-        humath::mat3f _ViewMatrix;
-        humath::mat3f _ProjectionMatrix;
-        humath::mat3f _WorldMatrix;
+        Camera m_Camera;
+        humath::mat3f m_ViewMatrix;
+        humath::mat3f m_ProjectionMatrix;
+        humath::mat3f m_WorldMatrix;
     };
 
 }; // end of namespace tasty

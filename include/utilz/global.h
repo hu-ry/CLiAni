@@ -41,15 +41,15 @@ enum e_NoiseAttribute{
 };
 
 enum e_Scene{
-    SCENE_TYPE_1 = 0,
-    SCENE_CUBE,
-    SCENE_TYPE_2
+    SCENE_CUBE = 0,
+    SCENE_PYRAMID,
+    SCENE_GENERIC
 };
 
 enum e_SceneEffect{
-    EFFECT_NONE = 0,
-    EFFECT_INVERTED,
-    EFFECT_TYPE_1
+    EFFECT_ROTATE = 0, // Rotates around the z-axis
+    EFFECT_PULSE_SCALE,
+    EFFECT_GENERIC
 };
 
 #endif //CLIANIMATION_GLOBAL_H

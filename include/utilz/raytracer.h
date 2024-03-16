@@ -18,14 +18,20 @@ struct Raytracer {
             MATERIAL_VANTABLACK = 1,
             MATERIAL_MIRROR = 2
         };
-
+        // raw vertices read out from file or resource
         std::vector<humath::v3f> vertices;
-        size_t verticesCount = 0;
+        size_t verticeCount = 0;
+
+        std::vector<humath::v4f> triangles;
+        size_t triangleCount = 0;
+
         MaterialProperty material = MaterialProperty::MATERIAL_NONE;
     };
 
-    void load_mesh(std::filesystem::path path_to_mesh);
-
+    // Reads out file into internal mesh datastructure
+    void load_mesh_from_file(std::filesystem::path& path_to_mesh);
+    void load_mesh_from_string(std::string& mesh_string);
+    // Calculates triangle planes from vertices and normals
     inline humath::v4f calc_plane();
 
 private:

@@ -12,6 +12,8 @@
 #include <model/flavour/voronoi.h>
 #include <model/flavour/cellular.h>
 
+#include <model/scene/cubescene.h>
+
 namespace CliAniHury {
 
     GreaseMonkey::GreaseMonkey() {
@@ -102,6 +104,7 @@ namespace CliAniHury {
     }
 
     void GreaseMonkey::initScene(int scene, int effect, int seed) {
+
         //TODO: Implement pls ryan
         exit(2);
     }
