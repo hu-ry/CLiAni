@@ -194,6 +194,7 @@ namespace CliAniHury {
 
         int exit = 0;
 
+
         if(_OperationMode == 1) {
             _ScrllOptionMenu = new DcdMenu(0, dcd_scrll_opt_choices, dcd_scrll_opt_default_selection, DCD_SCRLL_OPTION_AMOUNT);
             _ScrllOptionMenu->width = leftWidth;
@@ -470,8 +471,8 @@ namespace CliAniHury {
     }
 
     void Decidecation::runVariationInput(DcdMenu *localMenu, WINDOW *subWin) {
-        const int itemPosY = 4;
-        const int itemPosX = 18;
+        int itemPosY = 4;
+        int itemPosX = 18;
 
         const char* emptyField = {"          "};
         int backspace = ' ';
