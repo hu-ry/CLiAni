@@ -53,7 +53,7 @@ void Raytracer::load_mesh_from_string(std::string &mesh_string) {
             "material"
             };
 
-    // We parse Mesh Informations specified before the "---" seperator here
+    // We parse Mesh Informations specified before the "---" separator here
     for(const auto & attribute : meshAttributeLUT) {
 
         const auto currentDelim = attribute + equalDelim;

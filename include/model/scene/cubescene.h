@@ -12,7 +12,7 @@
 
 namespace tasty {
 
-    class CubeScene : Scene3D {
+    class CubeScene : public Scene3D {
     public:
         CubeScene(uint32_t t_height, uint32_t t_width);
 

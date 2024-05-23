@@ -45,7 +45,8 @@ namespace CliAniHury {
     }
 
     const char* GreaseMonkey::runFrame() {
-        // TODO: Give this something to output!
+        // TODO: Remove early exit at some point!!!
+        exit(2);
         return (*_currScene).transFrame();
     }
 
@@ -106,7 +107,8 @@ namespace CliAniHury {
     void GreaseMonkey::initScene(int scene, int effect, int seed) {
 
         //TODO: Implement pls ryan
-        exit(2);
+        _currScene = new tasty::CubeScene(WINDOW_LINE_HEIGHT, WINDOW_LINE_WIDTH);
+
     }
 
 }; // end of namespace CliAniHury

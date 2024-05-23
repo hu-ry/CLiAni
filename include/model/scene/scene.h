@@ -60,7 +60,7 @@ namespace tasty {
         }
     };
 
-    class Scene3D : Scene {
+    class Scene3D : public Scene {
     public:
         Scene3D(uint32_t t_height, uint32_t t_width) : Scene(t_height, t_width) {
 
