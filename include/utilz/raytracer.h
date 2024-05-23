@@ -28,8 +28,10 @@ struct Raytracer {
         MaterialProperty material = MaterialProperty::MATERIAL_NONE;
     };
 
-    // Reads out file into internal mesh datastructure
-    void load_mesh_from_file(std::filesystem::path& path_to_mesh);
+public:
+    // Reads out given filepath into internal mesh datastructure
+    void load_mesh_from_file(const std::filesystem::path& path_to_mesh);
+    // Reads out given string into internal mesh datastructure
     void load_mesh_from_string(std::string& mesh_string);
     // Calculates triangle planes from vertices and normals
     inline humath::v4f calc_plane();
