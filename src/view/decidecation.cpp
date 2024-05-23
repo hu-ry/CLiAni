@@ -323,7 +323,7 @@ namespace CliAniHury {
             delete _ScrllEffectMenu;
 
         } else if(_OperationMode == 2) {
-
+            exit = 1; // Dont forget to set or else we exit the program
         }
         clear();
         _ClaniBanner->drawIcon(_HeaderWindow);
