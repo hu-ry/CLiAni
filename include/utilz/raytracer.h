@@ -20,7 +20,7 @@ struct Raytracer {
         };
         // raw vertices read out from file or resource
         std::vector<humath::v3f> vertices;
-        size_t verticeCount = 0;
+        size_t vertexCount = 0;
 
         std::vector<humath::v4f> triangles;
         size_t triangleCount = 0;
