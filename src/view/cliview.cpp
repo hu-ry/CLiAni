@@ -99,7 +99,7 @@ namespace CliAniHury {
         // Deletes the bottom line
         move(LINES-1,0);
         deleteln();
-        // moves curser to 0,0
+        // moves cursor to 0,0
         move(0,0);
         // Makes changes visible
         refresh();
