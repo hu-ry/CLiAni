@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <regex>
 #include "raytracer.h"
 
 
@@ -34,7 +35,7 @@ void Raytracer::load_mesh_from_file(const std::filesystem::path &path_to_mesh) {
     load_mesh_from_string(verticesData);
 }
 
-void Raytracer::load_mesh_from_string(std::string &mesh_string) {
+void Raytracer::load_mesh_from_string(const std::string &mesh_string) {
 
     Mesh mesh_to_construct;
     meshCount++;
@@ -85,19 +86,20 @@ void Raytracer::load_mesh_from_string(std::string &mesh_string) {
     }
 
     // This cuts off everything before the triangle-data of the mesh starts
-    size_t startOfMeshDelim = mesh_string.find("---", 0);
-    mesh_string = mesh_string.substr(mesh_string.find(nwlnDelim, startOfMeshDelim)+1, std::string::npos);
+    size_t startOfMeshDelim =  mesh_string.find( nwlnDelim, mesh_string.find("---", 0) )+1;
 
     // ===================
 
     std::string stringData;
 
-    // Reset start-position since we cut off string at "---" delimiter
-    startPos = 0;
+    // Set start-position since we want to cut off string at "---" delimiter
+    startPos = startOfMeshDelim;
     auto kmmPos = mesh_string.find(kmmDelim, startPos);
     auto SmclnPos = mesh_string.find(smclnDelim, startPos);
     auto nwlnPos = mesh_string.find(nwlnDelim, startPos);
 
+    // First pass of string manipulation
+    // Parsing for mesh integrity and removing newlines and semicolons
     while (kmmPos != std::string::npos) {
         if (kmmPos < SmclnPos && kmmPos < nwlnPos) {
             stringData += mesh_string.substr(startPos, kmmPos - startPos) + kmmDelim;
@@ -119,7 +121,13 @@ void Raytracer::load_mesh_from_string(std::string &mesh_string) {
         }
     }
 
-    //*sizeArray = std::count(stringData.begin(), stringData.end(), ',') + 1;
+    size_t entries = std::count(stringData.begin(), stringData.end(), ',');
+
+    // Each vertex should have 5 floats per row which are delimited by 5 commas
+    if(entries%5 != 0) {
+        std::cout << "ERROR::MESHOBJECT::MESH_CORRUPTED" << std::endl;
+        return;
+    }
 
     std::cout << ",: " << kmmPos << std::endl;
     std::cout << ";: " << SmclnPos << std::endl;
@@ -128,8 +136,32 @@ void Raytracer::load_mesh_from_string(std::string &mesh_string) {
 
     std::cout << stringData << std::endl;
 
+    mesh_to_construct.vertexCount = (size_t)entries/5;
+    mesh_to_construct.vertices.reserve(mesh_to_construct.vertexCount);
 
-    // TODO: Implement conversion from strings to floats and insertion of read-out mesh
+    // Second pass of string manipulation
+    // Removes all occurrences of "f" indicator for floating point numbers which might break std::stof conversion
+    stringData = std::regex_replace( stringData, std::regex("f"), "");
+
+    startPos = 0;
+    for(int i = 0; i < (int)(entries/5); i++) {
+        auto firstEnd = stringData.find(kmmDelim, startPos);
+        auto secondEnd = stringData.find(kmmDelim, firstEnd+kmmDelim.length());
+        auto thirdEnd = stringData.find(kmmDelim, secondEnd+kmmDelim.length());
+
+        // inplace construction of our vector for the first three entries of a row
+        mesh_to_construct.vertices[i] = humath::v3f(
+                std::stof(stringData.substr(startPos, firstEnd - startPos)),
+                std::stof(stringData.substr(startPos, secondEnd - firstEnd - kmmDelim.length())),
+                std::stof(stringData.substr(startPos, thirdEnd - secondEnd - kmmDelim.length()))
+        );
+
+        // sanity print debugging...(gdb was playing me like a fiddle)
+        std::cout << std::to_string(mesh_to_construct.vertices[i].x) << std::to_string(mesh_to_construct.vertices[i].y) << std::to_string(mesh_to_construct.vertices[i].z) << startPos << std::endl;
+
+        startPos = stringData.find(kmmDelim, thirdEnd + kmmDelim.length());
+        startPos = stringData.find(kmmDelim, startPos + kmmDelim.length()) + kmmDelim.length();
+    }
 
     // Insert constructed mesh
     meshes.push_back(mesh_to_construct);

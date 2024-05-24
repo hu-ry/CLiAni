@@ -8,7 +8,7 @@
 
 namespace tasty {
 
-    std::string cube("material=0\n"
+    const std::string cube("material=0\n"
                      "---\n"
             "-100.0f,-100.0f,-100.0f;0.0f,0.0f\n"
             "100.0f,-100.0f,-100.0f;1.0f,0.0f\n"
