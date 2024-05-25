@@ -34,10 +34,16 @@ public:
     // Reads out given string into internal mesh datastructure
     void load_mesh_from_string(const std::string& mesh_string);
     // Calculates triangle planes from vertices and normals
-    inline humath::v4f calc_plane();
+    inline void calc_triangle_plane(size_t mesh_to_calc);
+
+
+    // Getter & Setter
+    size_t GetMeshCount() { return meshCount; }
+
+    // Data accessible by the user
+    std::vector<Mesh> meshes;
 
 private:
-    std::vector<Mesh> meshes;
     size_t meshCount = 0;
 
 };

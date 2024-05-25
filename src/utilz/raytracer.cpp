@@ -124,7 +124,7 @@ void Raytracer::load_mesh_from_string(const std::string &mesh_string) {
     size_t entries = std::count(stringData.begin(), stringData.end(), ',');
 
     // Each vertex should have 5 floats per row which are delimited by 5 commas
-    if(entries%5 != 0) {
+    if(entries%5 != 0 && entries%3 != 0) {
         std::cout << "ERROR::MESHOBJECT::MESH_CORRUPTED" << std::endl;
         return;
     }
@@ -167,6 +167,12 @@ void Raytracer::load_mesh_from_string(const std::string &mesh_string) {
     meshes.push_back(mesh_to_construct);
 }
 
-humath::v4f Raytracer::calc_plane() {
-    return {}; // TODO: calculate triangle planes from vertices and normals
+void Raytracer::calc_triangle_plane(size_t mesh_to_calc) {
+
+    const size_t triangleCount = meshes[mesh_to_calc].vertexCount/3;
+    for(int triangleIndex = 0; triangleIndex < triangleCount; triangleIndex++) {
+
+    }
+
+    // TODO: calculate triangle planes from vertices and normals
 }
