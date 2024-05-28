@@ -168,11 +168,32 @@ void Raytracer::load_mesh_from_string(const std::string &mesh_string) {
 }
 
 void Raytracer::calc_triangle_plane(size_t mesh_to_calc) {
+    Raytracer::Mesh& mesh = meshes[mesh_to_calc];
+    const size_t triangleCount = mesh.vertexCount/3;
 
-    const size_t triangleCount = meshes[mesh_to_calc].vertexCount/3;
-    for(int triangleIndex = 0; triangleIndex < triangleCount; triangleIndex++) {
+    // Prepare triangles vector
+    mesh.triangleCount = triangleCount;
+    mesh.triangles.reserve(triangleCount);
 
+    // Go through every triangle defined by 3 vertices
+    for(int triangleIndex = 0; triangleIndex < (int)triangleCount; triangleIndex++) {
+        const int triangleOffset = triangleIndex * 3;
+
+        // First we calculate two vectors that cross on the (1)first point of the triangle
+        const humath::v3f vectorA(mesh.vertices[triangleOffset+1] - mesh.vertices[triangleOffset]); // Point2 - Point1
+        const humath::v3f vectorB(mesh.vertices[triangleOffset+2] - mesh.vertices[triangleOffset]); // Point3 - Point1
+
+        // Now we calculate the normal of the two crossing vectors by calculating the cross-product
+        humath::v3f normalVector(vectorA);
+        normalVector.cross_product(vectorB);
+
+        // Now we calculate the 4th component that defines our triangle plane with the help of our normal
+        // We just use the dot-product from our normal and the first corner of our triangle here
+        mesh.triangles[triangleIndex] = humath::v4f(
+                normalVector.x,
+                normalVector.y,
+                normalVector.z,
+                -( normalVector.dot_product(mesh.vertices[triangleOffset]) )
+                );
     }
-
-    // TODO: calculate triangle planes from vertices and normals
 }

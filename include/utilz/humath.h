@@ -331,6 +331,9 @@ namespace humath {
             this->z = this->x * v.y - this->y * v.x;
             return *this;
         }
+        inline constexpr float dot_product(v3f const& v) const {
+            return this->x * v.x + this->y * v.y + this->y * v.y;
+        }
     }v3f;
 
     typedef struct v4f{
