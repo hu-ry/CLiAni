@@ -332,7 +332,7 @@ namespace humath {
             return *this;
         }
         inline constexpr float dot_product(v3f const& v) const {
-            return this->x * v.x + this->y * v.y + this->y * v.y;
+            return this->x * v.x + this->y * v.y + this->z * v.z;
         }
     }v3f;
 
