@@ -49,7 +49,7 @@ namespace tasty {
     
     CubeScene::CubeScene(uint32_t t_height, uint32_t t_width)
         : Scene3D(t_height, t_width) {
-        m_Camera.Position = {0.0, -200.0, 0.0};
+        m_Camera->Position = {0.0, -200.0, 0.0};
 
         m_tracer.load_mesh_from_string(cube); // TODO: Teststring
     }

@@ -38,7 +38,7 @@ void Raytracer::load_mesh_from_file(const std::filesystem::path &path_to_mesh) {
 void Raytracer::load_mesh_from_string(const std::string &mesh_string) {
 
     Mesh mesh_to_construct;
-    meshCount++;
+    m_meshCount++;
 
     size_t startPos = 0;
 
@@ -157,7 +157,7 @@ void Raytracer::load_mesh_from_string(const std::string &mesh_string) {
         );
 
         // sanity print debugging...(gdb was playing me like a fiddle)
-        std::cout << std::to_string(mesh_to_construct.vertices[i].x) << std::to_string(mesh_to_construct.vertices[i].y) << std::to_string(mesh_to_construct.vertices[i].z) << startPos << std::endl;
+        //std::cout << std::to_string(mesh_to_construct.vertices[i].x) << std::to_string(mesh_to_construct.vertices[i].y) << std::to_string(mesh_to_construct.vertices[i].z) << startPos << std::endl;
 
         startPos = stringData.find(kmmDelim, thirdEnd + kmmDelim.length());
         startPos = stringData.find(kmmDelim, startPos + kmmDelim.length()) + kmmDelim.length();
@@ -196,4 +196,14 @@ void Raytracer::calc_triangle_plane(size_t mesh_to_calc) {
                 -( normalVector.dot_product(mesh.vertices[triangleOffset]) )
                 );
     }
+}
+
+void Raytracer::setup_raylines_calc(std::shared_ptr<tasty::Camera> camera, uint32_t width, uint32_t height) {
+    m_camera = std::move(camera);
+    m_Dimension.height = height;
+    m_Dimension.width = width;
+
+
+
+    return;
 }

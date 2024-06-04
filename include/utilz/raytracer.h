@@ -10,6 +10,7 @@
 #include <filesystem>
 #include <vector>
 #include <humath.h>
+#include <scene/scene.h>
 
 struct Raytracer {
     struct Mesh {
@@ -35,16 +36,23 @@ public:
     void load_mesh_from_string(const std::string& mesh_string);
     // Calculates triangle planes from vertices and normals
     inline void calc_triangle_plane(size_t mesh_to_calc);
+    // This sets up the calculation of ray lines
+    void setup_raylines_calc(std::shared_ptr<tasty::Camera> camera, uint32_t width, uint32_t height);
 
 
     // Getter & Setter
-    size_t GetMeshCount() { return meshCount; }
+    size_t GetMeshCount() { return m_meshCount; }
 
     // Data accessible by the user
     std::vector<Mesh> meshes;
 
 private:
-    size_t meshCount = 0;
+    size_t m_meshCount = 0;
+    struct {
+        uint32_t height;
+        uint32_t width;
+    } m_Dimension;
+    std::shared_ptr<tasty::Camera> m_camera;
 
 };
 

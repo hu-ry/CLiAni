@@ -10,6 +10,7 @@
 #include <utilz/humath.h>
 #include <cstdint>
 #include <tuple>
+#include <memory>
 
 namespace tasty {
 
@@ -67,7 +68,7 @@ namespace tasty {
         }
 
     protected:
-        Camera m_Camera;
+        std::shared_ptr<Camera> m_Camera;
         humath::mat3f m_ViewMatrix;
         humath::mat3f m_ProjectionMatrix;
         humath::mat3f m_WorldMatrix;
