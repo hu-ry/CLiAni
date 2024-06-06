@@ -52,6 +52,13 @@ namespace tasty {
         m_Camera->Position = {0.0, -200.0, 0.0};
 
         m_tracer.load_mesh_from_string(cube); // TODO: Teststring
+
+        m_tracer.calc_triangle_plane(0);
+
+        m_tracer.setup_raylines_calc(m_Camera, m_Dimension.width, m_Dimension.height);
+
+        //TODO: Simulate light rayssss
+
     }
 
 

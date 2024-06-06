@@ -35,7 +35,7 @@ public:
     // Reads out given string into internal mesh datastructure
     void load_mesh_from_string(const std::string& mesh_string);
     // Calculates triangle planes from vertices and normals
-    inline void calc_triangle_plane(size_t mesh_to_calc);
+    void calc_triangle_plane(size_t mesh_to_calc);
     // This sets up the calculation of ray lines
     void setup_raylines_calc(std::shared_ptr<tasty::Camera> camera, uint32_t width, uint32_t height);
 
@@ -54,6 +54,7 @@ private:
     } m_Dimension;
     std::shared_ptr<tasty::Camera> m_camera;
 
+    std::vector<humath::v3f> m_rayAngles;
 };
 
 #endif //CLIANIMATION_RAYTRACER_H

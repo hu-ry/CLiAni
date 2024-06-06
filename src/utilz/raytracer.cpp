@@ -200,10 +200,48 @@ void Raytracer::calc_triangle_plane(size_t mesh_to_calc) {
 
 void Raytracer::setup_raylines_calc(std::shared_ptr<tasty::Camera> camera, uint32_t width, uint32_t height) {
     m_camera = std::move(camera);
-    m_Dimension.height = height;
-    m_Dimension.width = width;
+
+    // Guarantees that we have a center pixel
+    m_Dimension.width = width % 2 == 1 ? width : width+1;
+    m_Dimension.height = height % 2 == 1 ? height : height+1;
+
+    m_rayAngles.reserve(m_Dimension.width * m_Dimension.height);
+
+    const float viewPlaneWidth = 5.0f;
+    const float viewPlaneHeight = 4.0f;
+    const humath::v2i viewPlaneCenter(
+            (int) m_Dimension.width / 2,
+            (int) m_Dimension.height / 2
+            );
+    const float pixelWidth = viewPlaneWidth / (float)m_Dimension.width;
+    const float pixelHeight = viewPlaneHeight / (float)m_Dimension.height;
+    const humath::v3f ViewPlaneDistanceFromCamera(0.0f, 10.0f, 0.0f);
 
 
+    for(uint32_t heightIndex = 0; heightIndex < m_Dimension.width; heightIndex++) {
 
-    return;
+        for(uint32_t widthIndex = 0; widthIndex < m_Dimension.height; widthIndex++) {
+            humath::v3f& currentRayAngle = m_rayAngles[(heightIndex * m_Dimension.width) + widthIndex];
+
+            currentRayAngle = humath::v3f(
+                pixelWidth * (float)(widthIndex - viewPlaneCenter.x),
+                pixelHeight * (float)(heightIndex - viewPlaneCenter.y),
+                0
+             ); // initial angle is
+
+             // Adding our current camera position on top of it
+            currentRayAngle += m_camera->Position;
+             // Adding our distance from camera to view plane on top
+            currentRayAngle += ViewPlaneDistanceFromCamera;
+
+            // Here we do the Y-Axis Rotation (yaw)
+            currentRayAngle.rotate_y_axis(m_camera->Direction.yaw);
+
+            // Here we do the X-Axis Rotation (pitch)
+            currentRayAngle.rotate_x_axis(m_camera->Direction.pitch);
+
+        }
+    }
+
+
 }

@@ -176,8 +176,16 @@ namespace humath {
         // Explicit basic constructors
         inline constexpr explicit v3f(float scalar) : x(scalar), y(scalar), z(scalar){}
         inline constexpr v3f(float x, float y, float z) : x(x), y(y), z(z){}
+        // Trivial Move constructor (for the sake of completeness) (you don't ever want to use this!)
+        inline constexpr v3f(v3f&& v) noexcept : x(v.x), y(v.y), z(v.z) {
+            v.x = 0; v.y = 0; v.z = 0;
+        }
         // Unary arithmetic operators
         inline constexpr v3f& operator=(v3f const& v) = default;
+        inline constexpr v3f& operator=(v3f&& v) noexcept { // Trivial Move assignment
+            x = v.x; y = v.y; z = v.z; v.x = 0; v.y = 0; v.z = 0;
+            return *this;
+        }
         inline constexpr v3f& operator+=(float scalar) {
             this->x += scalar;
             this->y += scalar;
@@ -324,7 +332,7 @@ namespace humath {
                     v1.y / v2.y,
                     v1.z / v2.z);
         }
-        // Binary arithmetic member funciton operations
+        // Binary arithmetic member function operations
         inline constexpr v3f& cross_product(v3f const& v) {
             this->x = this->y * v.z - this->z * v.y;
             this->y = this->z * v.x - this->x * v.z;
@@ -333,6 +341,21 @@ namespace humath {
         }
         inline constexpr float dot_product(v3f const& v) const {
             return this->x * v.x + this->y * v.y + this->z * v.z;
+        }
+        inline constexpr v3f& rotate_x_axis(const float degree) {
+            this->y = this->y * cosf(degree) - this->z * sinf(degree);
+            this->z = this->y * sinf(degree) - this->z * cosf(degree);
+            return *this;
+        }
+        inline constexpr v3f& rotate_y_axis(const float degree) {
+            this->x = this->x * cosf(degree) + this->z * sinf(degree);
+            this->z = -(this->x) * sinf(degree) + this->z * cosf(degree);
+            return *this;
+        }
+        inline constexpr v3f& rotate_z_axis(const float degree) {
+            this->x = this->x * cosf(degree) - this->y * sinf(degree);
+            this->y = this->x * sinf(degree) + this->y * cosf(degree);
+            return *this;
         }
     }v3f;
 
