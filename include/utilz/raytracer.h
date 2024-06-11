@@ -38,23 +38,25 @@ public:
     void calc_triangle_plane(size_t mesh_to_calc);
     // This sets up the calculation of ray lines
     void setup_raylines_calc(std::shared_ptr<tasty::Camera> camera, uint32_t width, uint32_t height);
-
+    // Simulate rays
+    void run_ray_simulation();
 
     // Getter & Setter
-    size_t GetMeshCount() { return m_meshCount; }
+    size_t GetMeshCount() { return m_MeshCount; }
 
+public:
     // Data accessible by the user
-    std::vector<Mesh> meshes;
+    std::vector<Mesh> m_Meshes;
 
 private:
-    size_t m_meshCount = 0;
+    size_t m_MeshCount = 0;
     struct {
         uint32_t height;
         uint32_t width;
     } m_Dimension;
-    std::shared_ptr<tasty::Camera> m_camera;
+    std::shared_ptr<tasty::Camera> m_Camera;
 
-    std::vector<humath::v3f> m_rayAngles;
+    std::vector<humath::v3f> m_RayAngles;
 };
 
 #endif //CLIANIMATION_RAYTRACER_H
