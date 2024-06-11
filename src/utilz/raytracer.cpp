@@ -246,7 +246,24 @@ void Raytracer::setup_raylines_calc(std::shared_ptr<tasty::Camera> camera, uint3
 }
 
 void Raytracer::run_ray_simulation() {
+    const humath::v3f globalRayOrigin = m_Camera->Position;
 
+    // Calculate by brute force every intersection point for each pair of ray and plane
+    for(uint32_t rayIndex = 0; rayIndex < m_RayAngles.size(); rayIndex++) {
+        const humath::v3f currentRayAngle = m_RayAngles[rayIndex];
+
+        for(const Mesh& mesh : m_Meshes) {
+
+            for(uint32_t planeIndex = 0; planeIndex < mesh.triangleCount; planeIndex++) {
+
+                //TODO: Calculate distance to plane(Lambda) of ray
+                //TODO: With that you calculate intersection-point i and then potentially filter it
+
+
+            }
+
+        }
+    }
 
 
 }
