@@ -255,9 +255,51 @@ void Raytracer::run_ray_simulation() {
         for(const Mesh& mesh : m_Meshes) {
 
             for(uint32_t planeIndex = 0; planeIndex < mesh.triangleCount; planeIndex++) {
-
                 //TODO: Calculate distance to plane(Lambda) of ray
                 //TODO: With that you calculate intersection-point i and then potentially filter it
+
+                const humath::v3f v3Plane = { mesh.triangles[planeIndex].x,
+                                          mesh.triangles[planeIndex].y,
+                                          mesh.triangles[planeIndex].z };
+                // We calculate the length-factor of the ray as in how far it has to travel to the plane
+                float rayLength = v3Plane.dot_product(globalRayOrigin) + mesh.triangles[planeIndex].w / v3Plane.dot_product(currentRayAngle);
+                if(rayLength < 0) continue; // skip invalid rayLength
+
+                // Now we calculate the actual intersection point of the ray with our current plane
+                humath::v3f intersection = {
+                        rayLength * currentRayAngle.x + globalRayOrigin.x,
+                        rayLength * currentRayAngle.y + globalRayOrigin.y,
+                        rayLength * currentRayAngle.z + globalRayOrigin.z
+                };
+
+                // Bounding box check for triangle intersections happens here to be able to quickly exit early:
+                if( intersection.x < std::min({ // if intersection is outside of bounding box
+                        mesh.vertices[planeIndex*3].x, //TODO: Optimize at  later point
+                        mesh.vertices[planeIndex*3+1].x,
+                        mesh.vertices[planeIndex*3+2].x }) &&
+                        intersection.x > std::max({
+                        mesh.vertices[planeIndex*3].x,
+                        mesh.vertices[planeIndex*3+1].x,
+                        mesh.vertices[planeIndex*3+2].x }) &&
+                        intersection.y < std::min({
+                        mesh.vertices[planeIndex*3].y,
+                        mesh.vertices[planeIndex*3+1].y,
+                        mesh.vertices[planeIndex*3+2].y }) &&
+                        intersection.y > std::max({
+                        mesh.vertices[planeIndex*3].y,
+                        mesh.vertices[planeIndex*3+1].y,
+                        mesh.vertices[planeIndex*3+2].y }) &&
+                        intersection.z < std::min({
+                        mesh.vertices[planeIndex*3].z,
+                        mesh.vertices[planeIndex*3+1].z,
+                        mesh.vertices[planeIndex*3+2].z }) &&
+                        intersection.z > std::max({
+                        mesh.vertices[planeIndex*3].z,
+                        mesh.vertices[planeIndex*3+1].z,
+                        mesh.vertices[planeIndex*3+2].z }) ) {
+                    continue;
+                }
+
 
 
             }
