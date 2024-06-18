@@ -11,6 +11,12 @@
 #include "raytracer.h"
 
 
+Raytracer::Raytracer(uint32_t width, uint32_t height) :
+        m_Dimension({ // Guarantees that we have a center pixel
+            height % 2 == 1 ? height : height+1,
+            width % 2 == 1 ? width : width+1
+        }) {}
+
 void Raytracer::load_mesh_from_file(const std::filesystem::path &path_to_mesh) {
     std::string verticesData;
     std::ifstream verticesFile;
@@ -198,12 +204,8 @@ void Raytracer::calc_triangle_plane(size_t mesh_to_calc) {
     }
 }
 
-void Raytracer::setup_raylines_calc(std::shared_ptr<tasty::Camera> camera, uint32_t width, uint32_t height) {
+void Raytracer::setup_raylines_calc(std::shared_ptr<tasty::Camera> camera) {
     m_Camera = std::move(camera);
-
-    // Guarantees that we have a center pixel
-    m_Dimension.width = width % 2 == 1 ? width : width+1;
-    m_Dimension.height = height % 2 == 1 ? height : height+1;
 
     m_RayAngles.reserve(m_Dimension.width * m_Dimension.height);
 
@@ -300,6 +302,34 @@ void Raytracer::run_ray_simulation() {
                     continue;
                 }
 
+                // Now we perform the more precise filter for every/any remaining plane/ray combinations
+                // Check if the intersection point and one of the corner are on the same side divided by a virtual line drawn from the other two points
+                // t_2 - t_3
+                humath::v3f triangleBorder1, triangleBorder2 = mesh.vertices[planeIndex*3+1] - mesh.vertices[planeIndex*3+2];
+                humath::v3f vectorA = triangleBorder1.cross_product( intersection - mesh.vertices[planeIndex*3+2] );
+                humath::v3f vectorB = triangleBorder2.cross_product( mesh.vertices[planeIndex*3] - mesh.vertices[planeIndex*3+2] );
+
+                float insideBorderCoefficent = vectorA.dot_product(vectorB);
+                if(insideBorderCoefficent < 0) continue;
+
+                // t_1 - t_3
+                triangleBorder1 = triangleBorder2 = mesh.vertices[planeIndex*3] - mesh.vertices[planeIndex*3+2];
+                vectorA = triangleBorder1.cross_product( intersection - mesh.vertices[planeIndex*3+2] );
+                vectorB = triangleBorder2.cross_product( mesh.vertices[planeIndex*3+1] - mesh.vertices[planeIndex*3+2] );
+
+                insideBorderCoefficent = vectorA.dot_product(vectorB);
+                if(insideBorderCoefficent < 0) continue;
+
+
+                // t_1 - t_2
+                triangleBorder1 = triangleBorder2 = mesh.vertices[planeIndex*3] - mesh.vertices[planeIndex*3+1];
+                vectorA = triangleBorder1.cross_product( intersection - mesh.vertices[planeIndex*3+1] );
+                vectorB = triangleBorder2.cross_product( mesh.vertices[planeIndex*3+2] - mesh.vertices[planeIndex*3+1] );
+
+                insideBorderCoefficent = vectorA.dot_product(vectorB);
+                if(insideBorderCoefficent < 0) continue;
+
+                // TODO: Now we save the ray-combinaions that didn't get discarded for calculation...
 
 
             }
@@ -308,4 +338,9 @@ void Raytracer::run_ray_simulation() {
     }
 
 
+}
+
+std::shared_ptr<FrameBuffer<float, BufferType::SingleBuffer>> Raytracer::rasterize_rays() {
+    // TODO: Implement rasterisations of rays
+    return {};
 }

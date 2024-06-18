@@ -48,14 +48,15 @@ namespace tasty {
             "-100.0f,100.0f,-100.0f;0.0f,1.0f,");
     
     CubeScene::CubeScene(uint32_t t_height, uint32_t t_width)
-        : Scene3D(t_height, t_width) {
+        : Scene3D(t_height, t_width), m_tracer(Raytracer(t_width, t_height)) {
         m_Camera->Position = {0.0, -200.0, 0.0};
 
         m_tracer.load_mesh_from_string(cube); // TODO: Teststring
 
         m_tracer.calc_triangle_plane(0);
 
-        m_tracer.setup_raylines_calc(m_Camera, m_Dimension.width, m_Dimension.height);
+        m_tracer.setup_raylines_calc(m_Camera);
+
 
         //TODO: Simulate light rayssss
 
