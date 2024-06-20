@@ -15,7 +15,9 @@ Raytracer::Raytracer(uint32_t width, uint32_t height) :
         m_Dimension({ // Guarantees that we have a center pixel
             height % 2 == 1 ? height : height+1,
             width % 2 == 1 ? width : width+1
-        }) {}
+        }) {
+    m_Framebuffer = std::make_shared<FrameBuffer<float, BufferType::SingleBuffer>>(m_Dimension.height * m_Dimension.width);
+}
 
 void Raytracer::load_mesh_from_file(const std::filesystem::path &path_to_mesh) {
     std::string verticesData;
@@ -208,6 +210,7 @@ void Raytracer::setup_raylines_calc(std::shared_ptr<tasty::Camera> camera) {
     m_Camera = std::move(camera);
 
     m_RayAngles.reserve(m_Dimension.width * m_Dimension.height);
+    m_RayIntersectionCount.reserve(m_Dimension.width * m_Dimension.height);
 
     const float viewPlaneWidth = 5.0f;
     const float viewPlaneHeight = 4.0f;
@@ -245,6 +248,9 @@ void Raytracer::setup_raylines_calc(std::shared_ptr<tasty::Camera> camera) {
 
         }
     }
+
+    // Pre-allocating for performance-sake with 4 times the size to be on the safe side
+    rayAngle2TriangleIndexMapping.reserve(m_RayAngles.size()*4);
 }
 
 void Raytracer::run_ray_simulation() {
@@ -253,6 +259,7 @@ void Raytracer::run_ray_simulation() {
     // Calculate by brute force every intersection point for each pair of ray and plane
     for(uint32_t rayIndex = 0; rayIndex < m_RayAngles.size(); rayIndex++) {
         const humath::v3f currentRayAngle = m_RayAngles[rayIndex];
+        size_t rayIntersectionCount = 0;
 
         for(const Mesh& mesh : m_Meshes) {
 
@@ -330,11 +337,17 @@ void Raytracer::run_ray_simulation() {
                 if(insideBorderCoefficent < 0) continue;
 
                 // TODO: Now we save the ray-combinaions that didn't get discarded for calculation...
-
-
+                // there is a more optimal solution by creating a intermediate data structure saving the amount of all
+                // valid intersections of a ray with planes. Perhaps even rasterizing everything after all triangle are
+                // searched through after the end of the 2 innermost for-loops, so everything is still in cache and on the stack.
+                // but these kind of optimizations are for later etc...
+                rayAngle2TriangleIndexMapping.emplace_back(rayIndex, planeIndex);
+                rayIntersectionCount++;
             }
 
         }
+        // Safe the amount of intersections this particular ray has.
+        m_RayIntersectionCount.emplace_back(rayIntersectionCount);
     }
 
 
@@ -342,5 +355,12 @@ void Raytracer::run_ray_simulation() {
 
 std::shared_ptr<FrameBuffer<float, BufferType::SingleBuffer>> Raytracer::rasterize_rays() {
     // TODO: Implement rasterisations of rays
+
+
+    for(uint32_t pixelIndex = 0; pixelIndex < m_Framebuffer->Size(); pixelIndex++) {
+
+    }
+
+
     return {};
 }

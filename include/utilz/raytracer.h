@@ -18,31 +18,40 @@
 enum class BufferType { SingleBuffer, DoubleBuffer, TripleBuffer };
 
 template <typename T, BufferType E>
-class FrameBuffer {
+class FrameBuffer { // TODO: Just change the enum to use polymorphism to describe and implement different buffer types
 public:
-    explicit FrameBuffer(size_t _size) {
+    FrameBuffer() = delete;
+    explicit FrameBuffer(size_t size) : _size(size) {
         if constexpr (E == BufferType::SingleBuffer) {
             // Only one array
-            _data1.reserve(_size);
+            _data1.emplace();
+            _data1.value().reserve(size);
         } else if constexpr (E == BufferType::DoubleBuffer) {
             // Two arrays
-            _data1.reserve(_size);
-            _data2.reserve(_size);
+            _data1.emplace();
+            _data2.emplace();
+            _data1.reserve(size);
+            _data2.reserve(size);
         } else if constexpr (E == BufferType::TripleBuffer) {
             // Three arrays
-            _data1.reserve(_size);
-            _data2.reserve(_size);
-            _data3.reserve(_size);
+            _data1.emplace();
+            _data2.emplace();
+            _data3.emplace();
+            _data1.reserve(size);
+            _data2.reserve(size);
+            _data3.reserve(size);
         }
     }
+    constexpr size_t Size() {return _size;};
 
     // Accessors for individual arrays (if present)
-    auto& GetData1() { return _data1; }
-    auto& GetData2() { return _data2; }
-    auto& GetData3() { return _data3; }
+    std::vector<T>& GetData1() { return _data1; }
+    std::vector<T>& GetData2() { return _data2.value(); }
+    std::vector<T>& GetData3() { return _data3.value(); }
 
 private:
-    // Optional arrays based on the specified type
+    // Optional vectors based on the specified type
+    const size_t _size = 0;
     std::optional<std::vector<T>> _data1;
     std::optional<std::vector<T>> _data2;
     std::optional<std::vector<T>> _data3;
@@ -101,6 +110,8 @@ private:
     } m_Dimension;
     std::shared_ptr<tasty::Camera> m_Camera;
 
+    std::vector<std::pair<size_t, size_t>> rayAngle2TriangleIndexMapping;
+    std::vector<size_t> m_RayIntersectionCount;
     std::vector<humath::v3f> m_RayAngles;
 };
 
