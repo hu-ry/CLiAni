@@ -250,7 +250,7 @@ void Raytracer::setup_raylines_calc(std::shared_ptr<tasty::Camera> camera) {
     }
 
     // Pre-allocating for performance-sake with 4 times the size to be on the safe side
-    rayAngle2TriangleIndexMapping.reserve(m_RayAngles.size()*4);
+    m_validIntersections.reserve(m_RayAngles.size()*4);
 }
 
 void Raytracer::run_ray_simulation() {
@@ -341,7 +341,8 @@ void Raytracer::run_ray_simulation() {
                 // valid intersections of a ray with planes. Perhaps even rasterizing everything after all triangle are
                 // searched through after the end of the 2 innermost for-loops, so everything is still in cache and on the stack.
                 // but these kind of optimizations are for later etc...
-                rayAngle2TriangleIndexMapping.emplace_back(rayIndex, planeIndex);
+                //rayAngle2TriangleIndexMapping.emplace_back(rayIndex, planeIndex);
+                m_validIntersections.emplace_back(std::move(intersection));
                 rayIntersectionCount++;
             }
 
@@ -355,9 +356,34 @@ void Raytracer::run_ray_simulation() {
 
 std::shared_ptr<FrameBuffer<float, BufferType::SingleBuffer>> Raytracer::rasterize_rays() {
     // TODO: Implement rasterisations of rays
+    const humath::v3f globalRayOrigin = m_Camera->Position;
 
 
     for(uint32_t pixelIndex = 0; pixelIndex < m_Framebuffer->Size(); pixelIndex++) {
+        float lowestDistance = MAXFLOAT;
+        size_t pixelIntersectionCount = m_RayIntersectionCount[pixelIndex];
+
+        if(pixelIntersectionCount != 0) {
+            // We look up the lowest intersection-distance
+            for (uint32_t intersectionIndex = 0; intersectionIndex < pixelIntersectionCount; intersectionIndex++) {
+                const humath::v3f currentIntersection = m_validIntersections[intersectionIndex];
+
+                const float xComponent = currentIntersection.x - globalRayOrigin.x;
+                const float yComponent = currentIntersection.y - globalRayOrigin.y;
+                const float zComponent = currentIntersection.z - globalRayOrigin.z;
+                const float currentDistance = sqrtf(
+                        (xComponent * xComponent) + (yComponent * yComponent) + (zComponent * zComponent));
+
+                lowestDistance = std::min(currentDistance, lowestDistance);
+            }
+        } else {
+            lowestDistance = 0;
+        }
+        // Now we calculate the brightness of the pixel and safe it to the buffer
+        // Hardcoded distance to brightness differential for 10.0f distance of the object from the camera
+        float brightness = 0.1f / lowestDistance;
+        //m_Framebuffer[pixelIndex] =
+
 
     }
 

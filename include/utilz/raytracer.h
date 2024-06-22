@@ -45,9 +45,10 @@ public:
     constexpr size_t Size() {return _size;};
 
     // Accessors for individual arrays (if present)
-    std::vector<T>& GetData1() { return _data1; }
+    std::vector<T>& GetData1() { return _data1.value(); }
     std::vector<T>& GetData2() { return _data2.value(); }
     std::vector<T>& GetData3() { return _data3.value(); }
+
 
 private:
     // Optional vectors based on the specified type
@@ -111,6 +112,7 @@ private:
     std::shared_ptr<tasty::Camera> m_Camera;
 
     std::vector<std::pair<size_t, size_t>> rayAngle2TriangleIndexMapping;
+    std::vector<humath::v3f> m_validIntersections;
     std::vector<size_t> m_RayIntersectionCount;
     std::vector<humath::v3f> m_RayAngles;
 };
