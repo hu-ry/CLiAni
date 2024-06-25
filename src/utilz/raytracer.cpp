@@ -355,8 +355,8 @@ void Raytracer::run_ray_simulation() {
 }
 
 std::shared_ptr<FrameBuffer<float, BufferType::SingleBuffer>> Raytracer::rasterize_rays() {
-    // TODO: Implement rasterisations of rays
     const humath::v3f globalRayOrigin = m_Camera->Position;
+    auto& frameBuffer = m_Framebuffer->GetBuffer1();
 
 
     for(uint32_t pixelIndex = 0; pixelIndex < m_Framebuffer->Size(); pixelIndex++) {
@@ -381,12 +381,11 @@ std::shared_ptr<FrameBuffer<float, BufferType::SingleBuffer>> Raytracer::rasteri
         }
         // Now we calculate the brightness of the pixel and safe it to the buffer
         // Hardcoded distance to brightness differential for 10.0f distance of the object from the camera
-        float brightness = 0.1f / lowestDistance;
-        //m_Framebuffer[pixelIndex] =
-
+        float brightness = 1.0f / lowestDistance;
+        frameBuffer.emplace_back(brightness);
 
     }
 
 
-    return {};
+    return m_Framebuffer;
 }

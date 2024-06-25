@@ -18,7 +18,7 @@
 enum class BufferType { SingleBuffer, DoubleBuffer, TripleBuffer };
 
 template <typename T, BufferType E>
-class FrameBuffer { // TODO: Just change the enum to use polymorphism to describe and implement different buffer types
+class FrameBuffer {
 public:
     FrameBuffer() = delete;
     explicit FrameBuffer(size_t size) : _size(size) {
@@ -45,9 +45,23 @@ public:
     constexpr size_t Size() {return _size;};
 
     // Accessors for individual arrays (if present)
-    std::vector<T>& GetData1() { return _data1.value(); }
-    std::vector<T>& GetData2() { return _data2.value(); }
-    std::vector<T>& GetData3() { return _data3.value(); }
+    std::vector<T>& GetBuffer1() { return _data1.value(); }
+    std::vector<T>& GetBuffer2() {
+        if constexpr (E != BufferType::SingleBuffer) {
+            return _data2.value();
+        } else {
+            assert(false); // should not be accessed with this buffer type
+            return nullptr;
+        }
+    }
+    std::vector<T>& GetBuffer3() {
+        if constexpr (E == BufferType::TripleBuffer) {
+            return _data3.value();
+        } else {
+            assert(false); // should not be accessed with this buffer type
+            return nullptr;
+        }
+    }
 
 
 private:
@@ -80,9 +94,9 @@ public:
     Raytracer() = delete;
     Raytracer(uint32_t width, uint32_t height);
 
-    // Reads out given filepath into internal mesh datastructure
+    // Reads out given filepath into internal mesh data structure
     void load_mesh_from_file(const std::filesystem::path& path_to_mesh);
-    // Reads out given string into internal mesh datastructure
+    // Reads out given string into internal mesh data structure
     void load_mesh_from_string(const std::string& mesh_string);
     // Calculates triangle planes from vertices and normals
     void calc_triangle_plane(size_t mesh_to_calc);
