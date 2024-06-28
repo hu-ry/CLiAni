@@ -125,7 +125,6 @@ private:
     } m_Dimension;
     std::shared_ptr<tasty::Camera> m_Camera;
 
-    std::vector<std::pair<size_t, size_t>> rayAngle2TriangleIndexMapping;
     std::vector<humath::v3f> m_validIntersections;
     std::vector<size_t> m_RayIntersectionCount;
     std::vector<humath::v3f> m_RayAngles;

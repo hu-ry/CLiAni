@@ -5,6 +5,8 @@
 //##############################################################################
 
 #include "scene/cubescene.h"
+#include "raytracer-threadsafe.h"
+#include "scheduler.h"
 
 namespace tasty {
 
