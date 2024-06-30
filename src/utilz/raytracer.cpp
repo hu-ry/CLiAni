@@ -165,14 +165,15 @@ void Raytracer::load_mesh_from_string(const std::string &mesh_string) {
         );
 
         // sanity print debugging...(gdb was playing me like a fiddle)
-        //std::cout << std::to_string(mesh_to_construct.vertices[i].x) << std::to_string(mesh_to_construct.vertices[i].y) << std::to_string(mesh_to_construct.vertices[i].z) << startPos << std::endl;
+        //std::cout << std::to_string(mesh_to_construct.vertices[i].x) << std::to_string(mesh_to_construct.vertices[i].y)
+        // << std::to_string(mesh_to_construct.vertices[i].z) << startPos << std::endl;
 
         startPos = stringData.find(kmmDelim, thirdEnd + kmmDelim.length());
         startPos = stringData.find(kmmDelim, startPos + kmmDelim.length()) + kmmDelim.length();
     }
 
     // Insert constructed mesh
-    m_Meshes.push_back(mesh_to_construct);
+    m_Meshes.push_back(std::move(mesh_to_construct));
 }
 
 void Raytracer::calc_triangle_plane(size_t mesh_to_calc) {
@@ -186,6 +187,11 @@ void Raytracer::calc_triangle_plane(size_t mesh_to_calc) {
     // Go through every triangle defined by 3 vertices
     for(int triangleIndex = 0; triangleIndex < (int)triangleCount; triangleIndex++) {
         const int triangleOffset = triangleIndex * 3;
+
+        size_t size = m_Meshes[mesh_to_calc].vertices.size();
+        float temp = m_Meshes[mesh_to_calc].vertices[triangleOffset+1].x;
+        auto te = mesh.vertices[triangleOffset+1] - mesh.vertices[triangleOffset];
+        auto l = te.x;
 
         // First we calculate two vectors that cross on the (1)first point of the triangle
         const humath::v3f vectorA(mesh.vertices[triangleOffset+1] - mesh.vertices[triangleOffset]); // Point2 - Point1
