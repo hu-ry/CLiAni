@@ -153,7 +153,7 @@ private:
         std::vector<std::thread> m_Threads;
 
         void worker_thread(uint32_t _my_index);
-        static bool pop_task_from_local_queue(_TaskType& task);
+        bool pop_task_from_local_queue(_TaskType& task);
         bool pop_task_from_pool_queue(_TaskType& task);
         bool pop_task_from_other_thread_queue(_TaskType& task);
 

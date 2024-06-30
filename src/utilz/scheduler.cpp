@@ -8,6 +8,9 @@
 #include <cassert>
 #include <memory>
 
+thread_local Scheduler::StealQueue* Scheduler::ThreadPool::m_LocalQueue;
+thread_local uint32_t Scheduler::ThreadPool::m_MyIndex;
+
 void Scheduler::StealQueue::push(DataType func) {
     std::unique_lock<std::mutex> mlock(m_Mutex);
     m_Queue.push_back(std::move(func));
@@ -45,7 +48,7 @@ Scheduler::ThreadPool::ThreadPool() : m_IsDone(false) {
     try {
         m_Queues.reserve(threadCount);
         m_Threads.reserve(threadCount);
-        for(auto i = 0; i < threadCount; i++) {
+        for(uint32_t i = 0; i < threadCount; i++) {
             m_Queues.push_back(std::make_unique<StealQueue>());
             m_Threads.emplace_back(&ThreadPool::worker_thread, this, i);
         }
@@ -88,9 +91,9 @@ bool Scheduler::ThreadPool::pop_task_from_other_thread_queue(Scheduler::ThreadPo
 
 template<typename _FunctionType>
 std::future<typename std::invoke_result<_FunctionType>::type> Scheduler::ThreadPool::submit(_FunctionType func) {
-    using _ResultType = std::invoke_result<_FunctionType>::type;
+    using _ResultType = typename std::invoke_result<_FunctionType>::type;
 
-    const std::packaged_task<_ResultType()> task(func);
+    std::packaged_task<_ResultType()> task(func);
     std::future<_ResultType> result(task.get_future());
     if(m_LocalQueue) {
         m_LocalQueue->push(std::move(task));
