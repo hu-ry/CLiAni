@@ -27,15 +27,18 @@ private:
         ThreadSafeQueue(const ThreadSafeQueue &t) = delete;
 
         /**
-         * Removes the first element of the queue and returns it if the queue is not empty
-         * @return shared_ptr to the first element or null if the queue is empty
+         * Removes the first element and saves it to value and checks
+         * if the queue is not empty and returns true if the queue is not empty
+         * @return bool if first element was popped successfully or not
          */
-        [[nodiscard]] std::shared_ptr<T> try_pop() {
+        bool try_pop(T& value) {
             std::unique_lock<std::mutex> mlock(m_Mutex);
             if (!m_Queue.empty()) {
-                std::shared_ptr<T>(m_Queue.pop_front());
+                value = std::move(m_Queue.front());
+                m_Queue.pop_front();
+                return true;
             } else {
-                return nullptr;
+                return false;
             }
         }
 
@@ -46,11 +49,10 @@ private:
          */
         [[nodiscard]] std::shared_ptr<T> wait_and_pop() {
             std::unique_lock<std::mutex> mlock(m_Mutex);
-            while (m_Queue.empty())
-            {
-                m_Cond.wait(mlock);
-            }
-            return std::shared_ptr<T>(m_Queue.pop_front());
+            m_Cond.wait(mlock, [&]() { return !m_Queue.empty(); });
+            std::shared_ptr<T> result = m_Queue.front();
+            m_Queue.pop_front();
+            return result;
         }
 
         /**
@@ -58,9 +60,10 @@ private:
          * @param value The value
          */
         void push(T value) {
+            std::shared_ptr<T> toInsert(std::make_shared<T>(std::move(value)));
             std::unique_lock<std::mutex> mlock(m_Mutex);
-            m_Queue.push_back(value);
-            mlock.unlock();     // unlock before notificiation to minimize mutex contention
+            m_Queue.push_back(toInsert);
+            mlock.unlock();     // unlock before notification to minimize mutex contention
             m_Cond.notify_one(); // notify one waiting thread
         }
 
@@ -150,12 +153,13 @@ private:
         std::vector<std::thread> m_Threads;
 
         void worker_thread(uint32_t _my_index);
-        bool pop_task_from_local_queue(_TaskType& task);
+        static bool pop_task_from_local_queue(_TaskType& task);
         bool pop_task_from_pool_queue(_TaskType& task);
         bool pop_task_from_other_thread_queue(_TaskType& task);
 
     };
 public:
+
 Scheduler();
 
 };
