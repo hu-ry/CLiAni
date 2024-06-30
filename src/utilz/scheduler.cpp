@@ -101,12 +101,12 @@ std::future<typename std::invoke_result<_FunctionType>::type> Scheduler::ThreadP
 }
 
 void Scheduler::ThreadPool::run_pending_task() {
-    _TaskType task;
+    _TaskType task([](){});
     if(pop_task_from_local_queue(task) ||
        pop_task_from_pool_queue(task)  ||
        pop_task_from_other_thread_queue(task)
     ) {
-        task();
+        task.call();
     } else {
         std::this_thread::yield();
     }
