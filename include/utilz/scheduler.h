@@ -158,10 +158,12 @@ private:
         bool pop_task_from_other_thread_queue(_TaskType& task);
 
     };
+
 public:
+    Scheduler() : m_RaytracerTaskPool(std::make_unique<ThreadPool>()) {}
 
-Scheduler();
-
+private:
+    std::unique_ptr<ThreadPool> m_RaytracerTaskPool;
 };
 
 

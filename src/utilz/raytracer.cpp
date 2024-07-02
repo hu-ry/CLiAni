@@ -188,11 +188,6 @@ void Raytracer::calc_triangle_plane(size_t mesh_to_calc) {
     for(int triangleIndex = 0; triangleIndex < (int)triangleCount; triangleIndex++) {
         const int triangleOffset = triangleIndex * 3;
 
-        size_t size = m_Meshes[mesh_to_calc].vertices.size();
-        float temp = m_Meshes[mesh_to_calc].vertices[triangleOffset+1].x;
-        auto te = mesh.vertices[triangleOffset+1] - mesh.vertices[triangleOffset];
-        auto l = te.x;
-
         // First we calculate two vectors that cross on the (1)first point of the triangle
         const humath::v3f vectorA(mesh.vertices[triangleOffset+1] - mesh.vertices[triangleOffset]); // Point2 - Point1
         const humath::v3f vectorB(mesh.vertices[triangleOffset+2] - mesh.vertices[triangleOffset]); // Point3 - Point1
